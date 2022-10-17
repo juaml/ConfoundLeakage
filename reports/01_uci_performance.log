@@ -1,0 +1,169 @@
+Traceback (most recent call last):
+  File "/home/sam/Projects/LeakConfound/.venv/lib/python3.10/site-packages/jupyter_cache/executors/utils.py", line 51, in single_nb_execution
+    executenb(
+  File "/home/sam/Projects/LeakConfound/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/sam/Projects/LeakConfound/.venv/lib/python3.10/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/home/sam/Projects/LeakConfound/.venv/lib/python3.10/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 646, in run_until_complete
+    return future.result()
+  File "/home/sam/Projects/LeakConfound/.venv/lib/python3.10/site-packages/nbclient/client.py", line 663, in async_execute
+    await self.async_execute_cell(
+  File "/home/sam/Projects/LeakConfound/.venv/lib/python3.10/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/sam/Projects/LeakConfound/.venv/lib/python3.10/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+all_model_dict = {
+    'Linear/Logistic': 'LR',
+    'Decision Tree': 'DT',
+    'Random Forest': 'RF',
+    'Neural Network': 'MLP',
+    'Linear SVM': 'Lin SVM',
+    'RBF SVM': 'RBF SVM',
+    'dummy': "Chance Level",
+
+}
+with mpl.rc_context({
+    'figure.subplot.wspace': mm_to_inch(4),
+    'figure.subplot.hspace': mm_to_inch(2)
+}):
+    fig_all, axes = plot_performance(
+        df_plot_TaCo,
+        df_plot_non_TaCo,
+        figsize=[mm_to_inch(183),
+                 mm_to_inch(280)],
+        model_label_dict=all_model_dict,
+        hue_order=["X hat", "not removed", "removed"],
+
+    )
+    axes[-1, 0].set_xticklabels(axes[-1, 0].get_xticklabels(), rotation=90)
+    axes[-1, 1].set_xticklabels(axes[-1, 1].get_xticklabels(), rotation=90)
+
+glue("uci_all", fig_all, display=False)
+
+fig_all.savefig('./saved_figures/uci_performance_all.svg')
+fig_all.savefig('./saved_figures/uci_performance_all.png')
+
+with mpl.rc_context({
+    'figure.subplot.wspace': mm_to_inch(4),
+    'figure.subplot.hspace': mm_to_inch(2)
+}):
+    fig_all_shuffled, axes = plot_performance(
+        df_plot_TaCo_shuffled,
+        df_plot_non_TaCo_shuffled,
+        figsize=[mm_to_inch(183),
+                 mm_to_inch(280)],
+        model_label_dict=all_model_dict,
+        hue_order=["X hat", "not removed", "removed"],
+
+    )
+    axes[-1, 0].set_xticklabels(axes[-1, 0].get_xticklabels(), rotation=90)
+    axes[-1, 1].set_xticklabels(axes[-1, 1].get_xticklabels(), rotation=90)
+
+glue("uci_all_shuffled", fig_all_shuffled, display=False)
+fig_all_shuffled.savefig('./saved_figures/uci_performance_all_shuffled.svg')
+fig_all_shuffled.savefig('./saved_figures/uci_performance_all_shuffled.png')
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mZeroDivisionError[0m                         Traceback (most recent call last)
+Input [0;32mIn [10][0m, in [0;36m<cell line: 11>[0;34m()[0m
+[1;32m      1[0m all_model_dict [38;5;241m=[39m {
+[1;32m      2[0m     [38;5;124m'[39m[38;5;124mLinear/Logistic[39m[38;5;124m'[39m: [38;5;124m'[39m[38;5;124mLR[39m[38;5;124m'[39m,
+[1;32m      3[0m     [38;5;124m'[39m[38;5;124mDecision Tree[39m[38;5;124m'[39m: [38;5;124m'[39m[38;5;124mDT[39m[38;5;124m'[39m,
+[0;32m   (...)[0m
+[1;32m      9[0m 
+[1;32m     10[0m }
+[1;32m     11[0m [38;5;28;01mwith[39;00m mpl[38;5;241m.[39mrc_context({
+[1;32m     12[0m     [38;5;124m'[39m[38;5;124mfigure.subplot.wspace[39m[38;5;124m'[39m: mm_to_inch([38;5;241m4[39m),
+[1;32m     13[0m     [38;5;124m'[39m[38;5;124mfigure.subplot.hspace[39m[38;5;124m'[39m: mm_to_inch([38;5;241m2[39m)
+[1;32m     14[0m }):
+[0;32m---> 15[0m     fig_all, axes [38;5;241m=[39m [43mplot_performance[49m[43m([49m
+[1;32m     16[0m [43m        [49m[43mdf_plot_TaCo[49m[43m,[49m
+[1;32m     17[0m [43m        [49m[43mdf_plot_non_TaCo[49m[43m,[49m
+[1;32m     18[0m [43m        [49m[43mfigsize[49m[38;5;241;43m=[39;49m[43m[[49m[43mmm_to_inch[49m[43m([49m[38;5;241;43m183[39;49m[43m)[49m[43m,[49m
+[1;32m     19[0m [43m                 [49m[43mmm_to_inch[49m[43m([49m[38;5;241;43m280[39;49m[43m)[49m[43m][49m[43m,[49m
+[1;32m     20[0m [43m        [49m[43mmodel_label_dict[49m[38;5;241;43m=[39;49m[43mall_model_dict[49m[43m,[49m
+[1;32m     21[0m [43m        [49m[43mhue_order[49m[38;5;241;43m=[39;49m[43m[[49m[38;5;124;43m"[39;49m[38;5;124;43mX hat[39;49m[38;5;124;43m"[39;49m[43m,[49m[43m [49m[38;5;124;43m"[39;49m[38;5;124;43mnot removed[39;49m[38;5;124;43m"[39;49m[43m,[49m[43m [49m[38;5;124;43m"[39;49m[38;5;124;43mremoved[39;49m[38;5;124;43m"[39;49m[43m][49m[43m,[49m
+[1;32m     22[0m 
+[1;32m     23[0m [43m    [49m[43m)[49m
+[1;32m     24[0m     axes[[38;5;241m-[39m[38;5;241m1[39m, [38;5;241m0[39m][38;5;241m.[39mset_xticklabels(axes[[38;5;241m-[39m[38;5;241m1[39m, [38;5;241m0[39m][38;5;241m.[39mget_xticklabels(), rotation[38;5;241m=[39m[38;5;241m90[39m)
+[1;32m     25[0m     axes[[38;5;241m-[39m[38;5;241m1[39m, [38;5;241m1[39m][38;5;241m.[39mset_xticklabels(axes[[38;5;241m-[39m[38;5;241m1[39m, [38;5;241m1[39m][38;5;241m.[39mget_xticklabels(), rotation[38;5;241m=[39m[38;5;241m90[39m)
+
+Input [0;32mIn [8][0m, in [0;36mplot_performance[0;34m(df_TaCo, df_non_TaCo, figsize, model_label_dict, hue_order)[0m
+[1;32m     39[0m [38;5;66;03m# assert len(score_names) == 1[39;00m
+[1;32m     40[0m score_name [38;5;241m=[39m score_names[[38;5;241m0[39m]
+[0;32m---> 42[0m [43mcustom_bar_rope_plot[49m[43m([49m[43mx[49m[43m,[49m[43m [49m[43my[49m[43m,[49m[43m [49m[43mhue[49m[43m,[49m
+[1;32m     43[0m [43m                     [49m[43mcomparisons[49m[38;5;241;43m=[39;49m[43m([49m[43m([49m[38;5;124;43m'[39;49m[38;5;124;43mX hat[39;49m[38;5;124;43m'[39;49m[43m,[49m[43m [49m[38;5;124;43m'[39;49m[38;5;124;43mnot removed[39;49m[38;5;124;43m'[39;49m[43m)[49m[43m,[49m[43m [49m[43m([49m[38;5;124;43m'[39;49m[38;5;124;43mnot removed[39;49m[38;5;124;43m'[39;49m[43m,[49m[43m [49m[38;5;124;43m'[39;49m[38;5;124;43mremoved[39;49m[38;5;124;43m'[39;49m[43m)[49m[43m)[49m[43m,[49m
+[1;32m     44[0m [43m                     [49m[43mcomparisons_sing_y[49m[38;5;241;43m=[39;49m[43m[[49m[38;5;241;43m1.1[39;49m[43m,[49m[43m [49m[38;5;241;43m1.15[39;49m[43m][49m[43m,[49m
+[1;32m     45[0m [43m                     [49m[43mcv_repeats[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;124;43mrepeat[39;49m[38;5;124;43m'[39;49m[43m,[49m[43m [49m[43mdata[49m[38;5;241;43m=[39;49m[43mdata[49m[43m,[49m
+[1;32m     46[0m [43m                     [49m[43mhue_order[49m[38;5;241;43m=[39;49m[43mhue_order[49m[43m,[49m
+[1;32m     47[0m [43m                     [49m[43morder[49m[38;5;241;43m=[39;49m[38;5;28;43mlist[39;49m[43m([49m[43mused_model_dict[49m[38;5;241;43m.[39;49m[43mkeys[49m[43m([49m[43m)[49m[43m)[49m[43m,[49m
+[1;32m     48[0m [43m                     [49m[43mpalette[49m[38;5;241;43m=[39;49m[43msns[49m[38;5;241;43m.[39;49m[43mcolor_palette[49m[43m([49m[43m[[49m[43mgreen[49m[43m,[49m[43m [49m[43mblue[49m[43m,[49m[43m [49m[43mred[49m[43m][49m[43m)[49m[43m,[49m
+[1;32m     49[0m [43m                     [49m[43max[49m[38;5;241;43m=[39;49m[43max[49m[43m,[49m[43m [49m[43mshow_legend[49m[38;5;241;43m=[39;49m[38;5;28;43;01mFalse[39;49;00m[43m,[49m
+[1;32m     50[0m [43m                     [49m[43mrope_sign_fontsize[49m[38;5;241;43m=[39;49m[43mrope_sign_fontsize[49m[43m,[49m[43m [49m[43mrope_line_width[49m[38;5;241;43m=[39;49m[38;5;241;43m.5[39;49m[43m,[49m
+[1;32m     51[0m [43m                     [49m[43mrope[49m[38;5;241;43m=[39;49m[38;5;241;43m0.05[39;49m
+[1;32m     52[0m 
+[1;32m     53[0m [43m                     [49m[43m)[49m
+[1;32m     55[0m [38;5;28;01mif[39;00m i_row [38;5;241m==[39m [38;5;241m0[39m:
+[1;32m     56[0m     ax[38;5;241m.[39mset_title([38;5;124m'[39m[38;5;124mTaCo CR[39m[38;5;124m'[39m,)
+
+File [0;32m~/Projects/LeakConfound/leakconfound/leakconfound/plotting/plotting.py:143[0m, in [0;36mcustom_bar_rope_plot[0;34m(x, y, hue, cv_repeats, data, hue_order, comparisons, comparisons_sing_y, order, rope, rope_sign_fontsize, show_legend, ax, palette, rope_line_width, **kwargs)[0m
+[1;32m    141[0m idx_comp_0 [38;5;241m=[39m df_plot[38;5;241m.[39mquery([38;5;124mf[39m[38;5;124m"[39m[38;5;132;01m{[39;00mx[38;5;132;01m}[39;00m[38;5;124m==@x_val & ([39m[38;5;132;01m{[39;00mhue[38;5;132;01m}[39;00m[38;5;124m==@comparison[0]) [39m[38;5;124m"[39m)[38;5;241m.[39mindex
+[1;32m    142[0m idx_comp_1 [38;5;241m=[39m df_plot[38;5;241m.[39mquery([38;5;124mf[39m[38;5;124m"[39m[38;5;132;01m{[39;00mx[38;5;132;01m}[39;00m[38;5;124m==@x_val &  ([39m[38;5;132;01m{[39;00mhue[38;5;132;01m}[39;00m[38;5;124m==@comparison[1])[39m[38;5;124m"[39m)[38;5;241m.[39mindex
+[0;32m--> 143[0m sign [38;5;241m=[39m [43mget_rope[49m[43m([49m
+[1;32m    144[0m [43m    [49m[43mx[49m[38;5;241;43m=[39;49m[43mdf_plot[49m[38;5;241;43m.[39;49m[43mloc[49m[43m[[49m[43midx_comp_0[49m[43m,[49m[43m [49m[43my[49m[43m][49m[38;5;241;43m.[39;49m[43mvalues[49m[43m,[49m
+[1;32m    145[0m [43m    [49m[43my[49m[38;5;241;43m=[39;49m[43mdf_plot[49m[38;5;241;43m.[39;49m[43mloc[49m[43m[[49m[43midx_comp_1[49m[43m,[49m[43m [49m[43my[49m[43m][49m[38;5;241;43m.[39;49m[43mvalues[49m[43m,[49m
+[1;32m    146[0m [43m    [49m[43mrepeat[49m[38;5;241;43m=[39;49m[43mn_cv_repeats[49m[43m,[49m[43m [49m[43mrope[49m[38;5;241;43m=[39;49m[43mrope[49m
+[1;32m    147[0m [43m[49m[43m)[49m
+[1;32m    148[0m df [38;5;241m=[39m pd[38;5;241m.[39mDataFrame({[38;5;124m"[39m[38;5;124mcomparison[39m[38;5;124m"[39m: [comparison],
+[1;32m    149[0m                    x: [x_val], [38;5;124m"[39m[38;5;124msign[39m[38;5;124m"[39m: [sign],
+[1;32m    150[0m                    [38;5;124m"[39m[38;5;124mhue_0[39m[38;5;124m"[39m: comparison[[38;5;241m0[39m],
+[1;32m    151[0m                    [38;5;124m"[39m[38;5;124mhue_1[39m[38;5;124m"[39m: comparison[[38;5;241m1[39m],
+[1;32m    152[0m                    })
+[1;32m    154[0m df_comparisons[38;5;241m.[39mappend(df)
+
+File [0;32m~/Projects/LeakConfound/leakconfound/leakconfound/plotting/plotting.py:85[0m, in [0;36mget_rope[0;34m(x, y, repeat, rope)[0m
+[1;32m     83[0m [38;5;28;01mdef[39;00m [38;5;21mget_rope[39m(x: NDArray, y: NDArray,
+[1;32m     84[0m              repeat: [38;5;28mint[39m, rope: [38;5;28mfloat[39m [38;5;241m=[39m [38;5;241m.05[39m) [38;5;241m-[39m[38;5;241m>[39m [38;5;28mstr[39m:
+[0;32m---> 85[0m     probs [38;5;241m=[39m [43mtwo_on_single[49m[43m([49m[43mx[49m[43m,[49m[43m [49m[43my[49m[43m,[49m[43m [49m[43mruns[49m[38;5;241;43m=[39;49m[43mrepeat[49m[43m,[49m[43m [49m[43mrope[49m[38;5;241;43m=[39;49m[43mrope[49m[43m)[49m
+[1;32m     86[0m     [38;5;28;01mreturn[39;00m [[38;5;124m"[39m[38;5;124m>[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124m=[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124m<[39m[38;5;124m"[39m][np[38;5;241m.[39margmax(probs)]
+
+File [0;32m~/Projects/LeakConfound/.venv/lib/python3.10/site-packages/baycomp/single.py:239[0m, in [0;36mtwo_on_single[0;34m(x, y, rope, runs, names, plot)[0m
+[1;32m    213[0m [38;5;28;01mdef[39;00m [38;5;21mtwo_on_single[39m(x, y, rope[38;5;241m=[39m[38;5;241m0[39m, runs[38;5;241m=[39m[38;5;241m1[39m, [38;5;241m*[39m, names[38;5;241m=[39m[38;5;28;01mNone[39;00m, plot[38;5;241m=[39m[38;5;28;01mFalse[39;00m):
+[1;32m    214[0m     [38;5;124;03m"""[39;00m
+[1;32m    215[0m [38;5;124;03m    Compute probabilities using a Bayesian correlated t-test and,[39;00m
+[1;32m    216[0m [38;5;124;03m    optionally, draw a histogram.[39;00m
+[0;32m   (...)[0m
+[1;32m    237[0m [38;5;124;03m        that is, `((p_left, p_rope, p_right), fig)`[39;00m
+[1;32m    238[0m [38;5;124;03m        """[39;00m
+[0;32m--> 239[0m     [38;5;28;01mreturn[39;00m [43mcall_shortcut[49m[43m([49m[43mCorrelatedTTest[49m[43m,[49m[43m [49m[43mx[49m[43m,[49m[43m [49m[43my[49m[43m,[49m[43m [49m[43mrope[49m[43m,[49m
+[1;32m    240[0m [43m                         [49m[43mplot[49m[38;5;241;43m=[39;49m[43mplot[49m[43m,[49m[43m [49m[43mnames[49m[38;5;241;43m=[39;49m[43mnames[49m[43m,[49m[43m [49m[43mruns[49m[38;5;241;43m=[39;49m[43mruns[49m[43m)[49m
+
+File [0;32m~/Projects/LeakConfound/.venv/lib/python3.10/site-packages/baycomp/utils.py:20[0m, in [0;36mcall_shortcut[0;34m(test, x, y, rope, plot, names, *args, **kwargs)[0m
+[1;32m     19[0m [38;5;28;01mdef[39;00m [38;5;21mcall_shortcut[39m(test, x, y, rope, [38;5;241m*[39margs, plot[38;5;241m=[39m[38;5;28;01mFalse[39;00m, names[38;5;241m=[39m[38;5;28;01mNone[39;00m, [38;5;241m*[39m[38;5;241m*[39mkwargs):
+[0;32m---> 20[0m     sample [38;5;241m=[39m [43mtest[49m[43m([49m[43mx[49m[43m,[49m[43m [49m[43my[49m[43m,[49m[43m [49m[43mrope[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+[1;32m     21[0m     [38;5;28;01mif[39;00m plot:
+[1;32m     22[0m         [38;5;28;01mreturn[39;00m sample[38;5;241m.[39mprobs(), sample[38;5;241m.[39mplot(names)
+
+File [0;32m~/Projects/LeakConfound/.venv/lib/python3.10/site-packages/baycomp/single.py:127[0m, in [0;36mCorrelatedTTest.__new__[0;34m(cls, x, y, rope, runs, names, nsamples)[0m
+[1;32m    124[0m [38;5;28;01mif[39;00m [38;5;28mlen[39m(x) [38;5;241m%[39m [38;5;28mround[39m(runs) [38;5;241m!=[39m [38;5;241m0[39m:
+[1;32m    125[0m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([38;5;124m"[39m[38;5;124mNumber of measurements is not divisible by number of runs[39m[38;5;124m"[39m)
+[0;32m--> 127[0m mean, var, df [38;5;241m=[39m [38;5;28;43mcls[39;49m[38;5;241;43m.[39;49m[43mcompute_statistics[49m[43m([49m[43mx[49m[43m,[49m[43m [49m[43my[49m[43m,[49m[43m [49m[43mruns[49m[43m)[49m
+[1;32m    128[0m [38;5;28;01mreturn[39;00m Posterior(mean, var, df, rope,
+[1;32m    129[0m                  np[38;5;241m.[39mmean(x), np[38;5;241m.[39mmean(y), names[38;5;241m=[39mnames,
+[1;32m    130[0m                  nsamples[38;5;241m=[39mnsamples)
+
+File [0;32m~/Projects/LeakConfound/.venv/lib/python3.10/site-packages/baycomp/single.py:153[0m, in [0;36mCorrelatedTTest.compute_statistics[0;34m(cls, x, y, runs)[0m
+[1;32m    151[0m mean [38;5;241m=[39m np[38;5;241m.[39mmean(diff)
+[1;32m    152[0m var [38;5;241m=[39m np[38;5;241m.[39mvar(diff, ddof[38;5;241m=[39m[38;5;241m1[39m)
+[0;32m--> 153[0m var [38;5;241m*[39m[38;5;241m=[39m [38;5;241;43m1[39;49m[43m [49m[38;5;241;43m/[39;49m[43m [49m[43mn[49m [38;5;241m+[39m [38;5;241m1[39m [38;5;241m/[39m (nfolds [38;5;241m-[39m [38;5;241m1[39m)  [38;5;66;03m# Nadeau-Bengio's correction[39;00m
+[1;32m    154[0m [38;5;28;01mreturn[39;00m mean, var, n [38;5;241m-[39m [38;5;241m1[39m
+
+[0;31mZeroDivisionError[0m: division by zero
+ZeroDivisionError: division by zero
+
