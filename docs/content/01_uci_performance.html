@@ -1,0 +1,865 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1 UCI Performance &#8212; High Level Analyzes of Confound Regression Leaks</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/tabs.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2a Reason: Continuous Features" href="02a_introspect_continuous_feat.html" />
+    <link rel="prev" title="Analyses for the paper" href="../intro.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">High Level Analyzes of Confound Regression Leaks</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Analyses for the paper
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   1 UCI Performance
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="02a_introspect_continuous_feat.html">
+   2a Reason: Continuous Features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="02b_introspect_low_prec_feat.html">
+   2b Reason: Low Precision Features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="03_real_world.html">
+   Analysis 3: Real World Datasets Audio data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="04a_walk_through.html">
+   4a Walk Through Analyses with binary TaCo
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="04b_walk_through.html">
+   4b Walk Through Analyses with causal continuous confound
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        <a class="dropdown-buttons"
+            href="../_sources/content/01_uci_performance.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/content/01_uci_performance.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fcontent/01_uci_performance.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/content/01_uci_performance.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   1 UCI Performance
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#set-mpl-settings">
+     Set MPL Settings
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plotting-performance-for-selected-datapoints">
+   Plotting Performance for Selected Datapoints
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plotting-performance-for-all-datapoints">
+   Plotting Performance for All Datapoints
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#these-are-the-figures">
+     These are the Figures
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>1 UCI Performance</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   1 UCI Performance
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#set-mpl-settings">
+     Set MPL Settings
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plotting-performance-for-selected-datapoints">
+   Plotting Performance for Selected Datapoints
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plotting-performance-for-all-datapoints">
+   Plotting Performance for All Datapoints
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#these-are-the-figures">
+     These are the Figures
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="uci-performance">
+<h1>1 UCI Performance<a class="headerlink" href="#uci-performance" title="Permalink to this headline">¶</a></h1>
+<p>This notebook summarizes the performance and analysis on the  UCI Datasets.</p>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">MultipleLocator</span>
+<span class="kn">from</span> <span class="nn">sciplotlib</span> <span class="kn">import</span> <span class="n">style</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
+
+
+<span class="kn">from</span> <span class="nn">leakconfound.plotting</span> <span class="kn">import</span> <span class="n">custom_bar_rope_plot</span><span class="p">,</span> <span class="n">mm_to_inch</span>
+<span class="kn">from</span> <span class="nn">leakconfound.plotting.settings</span> <span class="kn">import</span> <span class="n">red</span><span class="p">,</span> <span class="n">blue</span><span class="p">,</span> <span class="n">green</span>
+<span class="kn">from</span> <span class="nn">leakconfound.analyses.load</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">prepare_performance_data</span><span class="p">,</span> <span class="n">gather_data</span><span class="p">,</span> <span class="n">data_to_long</span><span class="p">,</span> <span class="n">data_renamer</span><span class="p">,</span> <span class="n">models_renamer</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="set-mpl-settings">
+<h2>Set MPL Settings<a class="headerlink" href="#set-mpl-settings" title="Permalink to this headline">¶</a></h2>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">style</span><span class="o">.</span><span class="n">get_style</span><span class="p">(</span><span class="s1">&#39;nature-reviews&#39;</span><span class="p">))</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;xtick&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;ytick&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">titlesize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;figure&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;figure.subplot&#39;</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">hspace</span><span class="o">=</span><span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Load Datasets</p>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_base</span> <span class="o">=</span> <span class="s1">&#39;../../results/&#39;</span>
+<span class="n">raw_TaCo_folder</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">results_base</span><span class="si">}</span><span class="s1">basic_TaCo/uci_datasets/&#39;</span>
+<span class="n">shuffled_TaCo_folder</span> <span class="o">=</span> <span class="n">results_base</span> <span class="o">+</span> <span class="s1">&#39;shuffled_features_TaCo/uci_datasets/&#39;</span>
+
+<span class="c1"># load raw TaCo dataset</span>
+<span class="n">arguments_TaCo</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;model_name&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;is_deconfounded&#39;</span><span class="p">,</span> <span class="s1">&#39;random_seed&#39;</span><span class="p">]</span>
+<span class="n">score_names</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;test_r2&#39;</span><span class="p">,</span> <span class="s1">&#39;test_roc_auc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;test_X_hat_r2&#39;</span><span class="p">,</span> <span class="s1">&#39;test_X_hat_roc_auc&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">correct_fold_repeat</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">repeat</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">fold</span> <span class="o">//</span> <span class="mi">5</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">fold</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">fold</span> <span class="o">%</span> <span class="mi">5</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="k">def</span> <span class="nf">convert_hat_scores</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">_df</span>
+            <span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+                <span class="n">is_X_hat</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">score_name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;X_hat&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+                <span class="n">confound</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                    <span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="s2">&quot;X hat&quot;</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;is_X_hat&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;confound&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+                <span class="p">))</span>
+            <span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+                <span class="n">score_name</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">score_name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;X_hat_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+            <span class="p">)</span>
+            <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">correct_columns</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">correct_fold_repeat</span><span class="p">(</span><span class="n">convert_hat_scores</span><span class="p">(</span><span class="n">df</span><span class="p">))</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Load Raw Data</p>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_TaCo</span> <span class="o">=</span> <span class="n">prepare_performance_data</span><span class="p">(</span><span class="n">raw_TaCo_folder</span><span class="p">,</span>
+                                   <span class="n">analysis_arguments</span><span class="o">=</span><span class="n">arguments_TaCo</span><span class="p">,</span>
+                                   <span class="n">score_names</span><span class="o">=</span><span class="n">score_names</span><span class="p">)</span>
+
+<span class="c1"># load performance TaCo shuffled</span>
+
+<span class="n">df_TaCo_shuffled</span> <span class="o">=</span> <span class="n">prepare_performance_data</span><span class="p">(</span><span class="n">shuffled_TaCo_folder</span><span class="p">,</span>
+                                            <span class="n">analysis_arguments</span><span class="o">=</span><span class="n">arguments_TaCo</span><span class="p">,</span>
+                                            <span class="n">score_names</span><span class="o">=</span><span class="n">score_names</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+<span class="n">arguments_TaCo</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">arguments_TaCo</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;confound&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Subset TaCo data</p>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">order</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Linear/Logistic&quot;</span><span class="p">,</span> <span class="s2">&quot;Decision Tree&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;Random Forest&quot;</span><span class="p">,</span> <span class="s2">&quot;Neural Network&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;Linear SVM&quot;</span><span class="p">,</span> <span class="s2">&quot;RBF SVM&quot;</span><span class="p">,</span> <span class="s2">&quot;Gaussian Model&quot;</span><span class="p">]</span>
+
+<span class="n">datasets_selected</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Abalone&quot;</span><span class="p">,</span> <span class="s2">&quot;Heart&quot;</span><span class="p">,</span> <span class="s2">&quot;Real Estate&quot;</span><span class="p">,</span> <span class="s2">&quot;Blood&quot;</span><span class="p">]</span>
+
+<span class="n">df_plot_TaCo_selected</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_TaCo</span>
+                         <span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+                         <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;data in @datasets_selected&#39;</span><span class="p">)</span>
+                         <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;model_name in </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                         <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;score_name in </span><span class="si">{</span><span class="n">score_names</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                         <span class="p">)</span>
+
+
+<span class="n">df_plot_TaCo_shuffled_selected</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_TaCo_shuffled</span>
+                                  <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;data in @datasets_selected&#39;</span><span class="p">)</span>
+                                  <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;model_name in </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                                  <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;score_name in </span><span class="si">{</span><span class="n">score_names</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                                  <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Data Retrieval non TaCo -&gt; simulated confounds</p>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">prepare_non_TaCo</span><span class="p">(</span><span class="n">shuffled</span><span class="p">):</span>
+
+    <span class="n">used_model</span> <span class="o">=</span> <span class="s1">&#39;Random Forest&#39;</span>
+    <span class="n">non_TaCo_folder</span> <span class="o">=</span> <span class="n">results_base</span> <span class="o">+</span> <span class="p">(</span>
+        <span class="s1">&#39;/shuffled_features_non_TaCo/uci_sim_conf_datasets/&#39;</span> <span class="k">if</span> <span class="n">shuffled</span>
+        <span class="k">else</span> <span class="s1">&#39;/basic_non_TaCo/uci_sim_conf_datasets/&#39;</span>
+    <span class="p">)</span>
+
+    <span class="n">non_TaCo_arguments</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;model_name&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;is_deconfounded&#39;</span><span class="p">,</span> <span class="s1">&#39;random_seed&#39;</span><span class="p">]</span>
+
+    <span class="n">df_non_TaCo</span> <span class="o">=</span> <span class="n">gather_data</span><span class="p">(</span><span class="n">non_TaCo_folder</span><span class="p">,</span>
+                              <span class="n">non_TaCo_arguments</span><span class="p">,</span>
+                              <span class="p">)</span>
+
+    <span class="n">non_TaCo_arguments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;conf_corr&#39;</span><span class="p">)</span>
+    <span class="c1"># adding how much correlation was used for the confounds</span>
+    <span class="n">df_settings</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">df_non_TaCo</span>
+        <span class="o">.</span><span class="n">data</span>
+        <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">col</span><span class="p">:</span> <span class="n">col</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;real_estate&#39;</span><span class="p">,</span> <span class="s1">&#39;realestate&#39;</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">col</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)))</span>
+        <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">col</span><span class="p">:</span> <span class="n">col</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;realestate&#39;</span><span class="p">,</span> <span class="s1">&#39;real_estate&#39;</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;conf_corr&#39;</span><span class="p">})</span>
+        <span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="p">)</span>
+
+    <span class="n">df_non_TaCo</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_non_TaCo</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">),</span> <span class="n">df_settings</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">data_renamer</span><span class="p">),</span>
+            <span class="n">model_name</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">model_name</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">models_renamer</span><span class="p">),</span>
+            <span class="n">conf_corr</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">conf_corr</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;0.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">df_plot_non_TaCo</span> <span class="o">=</span> <span class="p">(</span><span class="n">data_to_long</span><span class="p">(</span><span class="n">df_non_TaCo</span><span class="p">,</span> <span class="n">non_TaCo_arguments</span><span class="p">,</span>
+                                     <span class="n">score_names</span><span class="p">)</span>
+                        <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(model_name == &quot;</span><span class="si">{</span><span class="n">used_model</span><span class="si">}</span><span class="s1">&quot;) &amp; &#39;</span>
+                               <span class="sa">f</span><span class="s1">&#39;(score_name in </span><span class="si">{</span><span class="n">score_names</span><span class="si">}</span><span class="s1">)&#39;</span>
+                               <span class="p">)</span>
+                        <span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+                        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df_plot_non_TaCo</span>
+
+
+<span class="n">df_plot_non_TaCo</span> <span class="o">=</span> <span class="n">prepare_non_TaCo</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">df_plot_non_TaCo_shuffled</span> <span class="o">=</span> <span class="n">prepare_non_TaCo</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">df_plot_non_TaCo_selected</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_plot_non_TaCo</span>
+                             <span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+                             <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;data in @datasets_selected&#39;</span><span class="p">)</span>
+                             <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;model_name in </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                             <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;score_name in </span><span class="si">{</span><span class="n">score_names</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                             <span class="p">)</span>
+
+
+<span class="n">df_plot_non_TaCo_shuffled_selected</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_plot_non_TaCo_shuffled</span>
+                                      <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;data in @datasets_selected&#39;</span><span class="p">)</span>
+                                      <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;model_name in </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                                      <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;score_name in </span><span class="si">{</span><span class="n">score_names</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                                      <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>clean &amp; correct Repeat and Fold &amp; Scoring</p>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_plot_TaCo</span> <span class="o">=</span> <span class="n">correct_columns</span><span class="p">(</span><span class="n">df_TaCo</span><span class="p">)</span>
+<span class="n">df_plot_TaCo_shuffled</span> <span class="o">=</span> <span class="n">correct_columns</span><span class="p">(</span><span class="n">df_TaCo_shuffled</span><span class="p">)</span>
+<span class="n">df_plot_non_TaCo</span> <span class="o">=</span> <span class="n">correct_columns</span><span class="p">(</span><span class="n">df_plot_non_TaCo</span><span class="p">)</span>
+<span class="n">df_plot_non_TaCo_shuffled</span> <span class="o">=</span> <span class="n">correct_columns</span><span class="p">(</span><span class="n">df_plot_non_TaCo_shuffled</span><span class="p">)</span>
+
+<span class="n">df_plot_TaCo_selected</span> <span class="o">=</span> <span class="n">correct_columns</span><span class="p">(</span><span class="n">df_plot_TaCo_selected</span><span class="p">)</span>
+<span class="n">df_plot_TaCo_shuffled_selected</span> <span class="o">=</span> <span class="n">correct_columns</span><span class="p">(</span><span class="n">df_plot_TaCo_shuffled_selected</span><span class="p">)</span>
+<span class="n">df_plot_non_TaCo_selected</span> <span class="o">=</span> <span class="n">correct_columns</span><span class="p">(</span><span class="n">df_plot_non_TaCo_selected</span><span class="p">)</span>
+<span class="n">df_plot_non_TaCo_shuffled_selected</span> <span class="o">=</span> <span class="n">correct_columns</span><span class="p">(</span><span class="n">df_plot_non_TaCo_shuffled_selected</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Create a function to plot</p>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_performance</span><span class="p">(</span><span class="n">df_TaCo</span><span class="p">,</span> <span class="n">df_non_TaCo</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_label_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">hue_order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="p">):</span>
+    <span class="c1"># col = &#39;features&#39;</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;model_name&#39;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;score&#39;</span>
+    <span class="n">hue</span> <span class="o">=</span> <span class="s1">&#39;confound&#39;</span>
+    <span class="n">hue_order</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;not removed&#39;</span><span class="p">,</span> <span class="s1">&#39;removed&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">hue_order</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">hue_order</span>
+
+    <span class="n">row_vals</span> <span class="o">=</span> <span class="n">df_TaCo</span><span class="p">[</span><span class="n">row</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+    <span class="n">n_rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">row_vals</span><span class="p">)</span>
+    <span class="n">rope_sign_fontsize</span> <span class="o">=</span> <span class="mi">9</span>
+
+    <span class="n">used_model_dict</span> <span class="o">=</span> <span class="p">({</span>
+        <span class="s1">&#39;Linear/Logistic&#39;</span><span class="p">:</span> <span class="s1">&#39;LR&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Decision Tree&#39;</span><span class="p">:</span> <span class="s1">&#39;DT&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Random Forest&#39;</span><span class="p">:</span> <span class="s1">&#39;RF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Neural Network&#39;</span><span class="p">:</span> <span class="s1">&#39;MLP&#39;</span>
+    <span class="p">}</span> <span class="k">if</span> <span class="n">model_label_dict</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">model_label_dict</span>
+    <span class="p">)</span>
+
+    <span class="n">ylabel_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;test_roc_auc&#39;</span><span class="p">:</span> <span class="s1">&#39;AUROC&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;test_r2&#39;</span><span class="p">:</span> <span class="s1">&#39;R²&#39;</span>
+    <span class="p">}</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+        <span class="n">nrows</span><span class="o">=</span><span class="n">n_rows</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i_row</span><span class="p">,</span> <span class="n">row_val</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row_vals</span><span class="p">):</span>  <span class="c1"># ,</span>
+        <span class="c1"># enumerate(col_vals)):</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i_row</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">df_TaCo</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="s1">&#39;(score_name in [&quot;test_r2&quot;, &quot;test_roc_auc&quot;] ) &amp; &#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">row</span><span class="si">}</span><span class="s1"> == @row_val)&#39;</span>
+        <span class="p">)</span>
+        <span class="n">score_names</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">score_name</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+        <span class="c1"># assert len(score_names) == 1</span>
+        <span class="n">score_name</span> <span class="o">=</span> <span class="n">score_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">custom_bar_rope_plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">hue</span><span class="p">,</span>
+                             <span class="n">comparisons</span><span class="o">=</span><span class="p">((</span><span class="s1">&#39;X hat&#39;</span><span class="p">,</span> <span class="s1">&#39;not removed&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;not removed&#39;</span><span class="p">,</span> <span class="s1">&#39;removed&#39;</span><span class="p">)),</span>
+                             <span class="n">comparisons_sing_y</span><span class="o">=</span><span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.15</span><span class="p">],</span>
+                             <span class="n">cv_repeats</span><span class="o">=</span><span class="s1">&#39;repeat&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+                             <span class="n">hue_order</span><span class="o">=</span><span class="n">hue_order</span><span class="p">,</span>
+                             <span class="n">order</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">used_model_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+                             <span class="n">palette</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">([</span><span class="n">green</span><span class="p">,</span> <span class="n">blue</span><span class="p">,</span> <span class="n">red</span><span class="p">]),</span>
+                             <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">show_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">rope_sign_fontsize</span><span class="o">=</span><span class="n">rope_sign_fontsize</span><span class="p">,</span> <span class="n">rope_line_width</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span>
+                             <span class="n">rope</span><span class="o">=</span><span class="mf">0.05</span>
+
+                             <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">i_row</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;TaCo CR&#39;</span><span class="p">,)</span>
+        <span class="k">if</span> <span class="n">i_row</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">row_vals</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">used_model_dict</span><span class="p">[</span><span class="n">tick</span><span class="o">.</span><span class="n">get_text</span><span class="p">()]</span> <span class="k">for</span> <span class="n">tick</span> <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">()],</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Model Used&#39;</span><span class="p">,</span> <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel_dict</span><span class="p">[</span><span class="n">score_name</span><span class="p">],</span> <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">,</span> <span class="mf">.25</span><span class="p">))</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">])</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="mf">.5</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i_row</span><span class="p">,</span> <span class="n">row_val</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row_vals</span><span class="p">):</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i_row</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">df_non_TaCo</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;(model_name == &quot;Random Forest&quot;) &amp; (</span><span class="si">{</span><span class="n">row</span><span class="si">}</span><span class="s1"> == @row_val)&#39;</span><span class="p">)</span>
+        <span class="n">custom_bar_rope_plot</span><span class="p">(</span><span class="s1">&#39;conf_corr&#39;</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">hue</span><span class="p">,</span>
+                             <span class="n">comparisons</span><span class="o">=</span><span class="p">((</span><span class="s1">&#39;X hat&#39;</span><span class="p">,</span> <span class="s1">&#39;not removed&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;not removed&#39;</span><span class="p">,</span> <span class="s1">&#39;removed&#39;</span><span class="p">)),</span>
+                             <span class="n">comparisons_sing_y</span><span class="o">=</span><span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.15</span><span class="p">],</span>
+                             <span class="n">cv_repeats</span><span class="o">=</span><span class="s1">&#39;repeat&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+                             <span class="n">hue_order</span><span class="o">=</span><span class="n">hue_order</span><span class="p">,</span>
+                             <span class="n">order</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;0.2&#39;</span><span class="p">,</span> <span class="s1">&#39;0.4&#39;</span><span class="p">,</span> <span class="s1">&#39;0.6&#39;</span><span class="p">,</span> <span class="s1">&#39;0.8&#39;</span><span class="p">],</span>
+                             <span class="n">palette</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">([</span><span class="n">green</span><span class="p">,</span> <span class="n">blue</span><span class="p">,</span> <span class="n">red</span><span class="p">]),</span>
+                             <span class="n">rope_sign_fontsize</span><span class="o">=</span><span class="n">rope_sign_fontsize</span><span class="p">,</span>
+                             <span class="n">rope_line_width</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span>
+                             <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">show_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">rope</span><span class="o">=</span><span class="mf">0.05</span>
+
+                             <span class="p">)</span>
+        <span class="k">if</span> <span class="n">i_row</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;CR Simulated Confounds&#39;</span><span class="p">,)</span>
+        <span class="k">if</span> <span class="n">i_row</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">row_vals</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span>
+                               <span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Confound Target </span><span class="se">\n</span><span class="s1">Correlation&#39;</span><span class="p">,)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">])</span>
+
+        <span class="n">axR</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+        <span class="n">axR</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+        <span class="n">axR</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">row_val</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">270</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+                       <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span>
+
+                       <span class="p">)</span>
+
+        <span class="n">handles</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">mpl</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">green</span><span class="p">,</span>  <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\hat</span><span class="si">{X}</span><span class="s1">$&#39;</span><span class="p">),</span>
+            <span class="n">mpl</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">blue</span><span class="p">,</span>  <span class="n">label</span><span class="o">=</span><span class="s1">&#39;$X$&#39;</span><span class="p">),</span>
+            <span class="n">mpl</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">red</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;$X_</span><span class="si">{CR}</span><span class="s1">$&#39;</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">handles</span><span class="p">,</span>
+                   <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Features:&quot;</span><span class="p">,</span>
+                   <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper center&#39;</span><span class="p">,</span>
+                   <span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">,)</span>
+
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="plotting-performance-for-selected-datapoints">
+<h1>Plotting Performance for Selected Datapoints<a class="headerlink" href="#plotting-performance-for-selected-datapoints" title="Permalink to this headline">¶</a></h1>
+<div class="cell tag_hide-input tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig_selected</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plot_performance</span><span class="p">(</span>
+    <span class="n">df_plot_TaCo_selected</span><span class="p">,</span>
+    <span class="n">df_plot_non_TaCo_selected</span><span class="p">,</span>
+    <span class="n">hue_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;X hat&quot;</span><span class="p">,</span> <span class="s2">&quot;not removed&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">],</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">183</span><span class="p">),</span>
+             <span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">140</span><span class="p">)])</span>
+
+
+<span class="n">fig_selected</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./saved_figures/uci_performance.svg&#39;</span><span class="p">)</span>
+<span class="n">fig_selected</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./saved_figures/uci_performance.png&#39;</span><span class="p">)</span>
+
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;uci_selected&quot;</span><span class="p">,</span> <span class="n">fig_selected</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">fig_shuffled_selected</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plot_performance</span><span class="p">(</span>
+    <span class="n">df_plot_TaCo_shuffled_selected</span><span class="p">,</span>
+    <span class="n">df_plot_non_TaCo_shuffled_selected</span><span class="p">,</span>
+    <span class="n">hue_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;X hat&quot;</span><span class="p">,</span> <span class="s2">&quot;not removed&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">],</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">183</span><span class="p">),</span>
+             <span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">140</span><span class="p">)])</span>
+
+
+<span class="n">fig_shuffled_selected</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./saved_figures/uci_performance_shuffled.svg&#39;</span><span class="p">)</span>
+<span class="n">fig_shuffled_selected</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./saved_figures/uci_performance_shuffled.png&#39;</span><span class="p">)</span>
+
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;uci_selected_shuffled&quot;</span><span class="p">,</span> <span class="n">fig_shuffled_selected</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="plotting-performance-for-all-datapoints">
+<h1>Plotting Performance for All Datapoints<a class="headerlink" href="#plotting-performance-for-all-datapoints" title="Permalink to this headline">¶</a></h1>
+<div class="cell tag_hide-input tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_model_dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Linear/Logistic&#39;</span><span class="p">:</span> <span class="s1">&#39;LR&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Decision Tree&#39;</span><span class="p">:</span> <span class="s1">&#39;DT&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Random Forest&#39;</span><span class="p">:</span> <span class="s1">&#39;RF&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Neural Network&#39;</span><span class="p">:</span> <span class="s1">&#39;MLP&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Linear SVM&#39;</span><span class="p">:</span> <span class="s1">&#39;Lin SVM&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;RBF SVM&#39;</span><span class="p">:</span> <span class="s1">&#39;RBF SVM&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Baseline Model&#39;</span><span class="p">:</span> <span class="s1">&#39;Chance Level&#39;</span><span class="p">,</span>
+
+
+<span class="p">}</span>
+<span class="k">with</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rc_context</span><span class="p">({</span>
+    <span class="s1">&#39;figure.subplot.wspace&#39;</span><span class="p">:</span> <span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+    <span class="s1">&#39;figure.subplot.hspace&#39;</span><span class="p">:</span> <span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">}):</span>
+    <span class="n">fig_all</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plot_performance</span><span class="p">(</span>
+        <span class="n">df_plot_TaCo</span><span class="p">,</span>
+        <span class="n">df_plot_non_TaCo</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">183</span><span class="p">),</span>
+                 <span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">280</span><span class="p">)],</span>
+        <span class="n">model_label_dict</span><span class="o">=</span><span class="n">all_model_dict</span><span class="p">,</span>
+        <span class="n">hue_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;X hat&quot;</span><span class="p">,</span> <span class="s2">&quot;not removed&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">],</span>
+
+    <span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;uci_all&quot;</span><span class="p">,</span> <span class="n">fig_all</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">fig_all</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./saved_figures/uci_performance_all.svg&#39;</span><span class="p">)</span>
+<span class="n">fig_all</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./saved_figures/uci_performance_all.png&#39;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rc_context</span><span class="p">({</span>
+    <span class="s1">&#39;figure.subplot.wspace&#39;</span><span class="p">:</span> <span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+    <span class="s1">&#39;figure.subplot.hspace&#39;</span><span class="p">:</span> <span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">}):</span>
+    <span class="n">fig_all_shuffled</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plot_performance</span><span class="p">(</span>
+        <span class="n">df_plot_TaCo_shuffled</span><span class="p">,</span>
+        <span class="n">df_plot_non_TaCo_shuffled</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">183</span><span class="p">),</span>
+                 <span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">280</span><span class="p">)],</span>
+        <span class="n">model_label_dict</span><span class="o">=</span><span class="n">all_model_dict</span><span class="p">,</span>
+        <span class="n">hue_order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;X hat&quot;</span><span class="p">,</span> <span class="s2">&quot;not removed&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">],</span>
+
+    <span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;uci_all_shuffled&quot;</span><span class="p">,</span> <span class="n">fig_all_shuffled</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig_all_shuffled</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./saved_figures/uci_performance_all_shuffled.svg&#39;</span><span class="p">)</span>
+<span class="n">fig_all_shuffled</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./saved_figures/uci_performance_all_shuffled.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="these-are-the-figures">
+<h2>These are the Figures<a class="headerlink" href="#these-are-the-figures" title="Permalink to this headline">¶</a></h2>
+<div class="tabbed-set docutils">
+<input checked="checked" id="655c56c2-1453-4870-9b98-fbbc65d04813" name="ec9707c1-6288-457b-b0ba-7e6ac259ba69" type="radio">
+</input><label class="tabbed-label" for="655c56c2-1453-4870-9b98-fbbc65d04813">
+selected</label><div class="tabbed-content docutils">
+<div class="figure align-default" style="width: 900px">
+<div class="cell_output docutils container">
+<img alt="../_images/01_uci_performance_17_0.png" src="../_images/01_uci_performance_17_0.png" />
+</div>
+</div>
+</div>
+<input id="aacd0c80-912b-4d13-8331-d00cf83ee292" name="ec9707c1-6288-457b-b0ba-7e6ac259ba69" type="radio">
+</input><label class="tabbed-label" for="aacd0c80-912b-4d13-8331-d00cf83ee292">
+selected shuffled </label><div class="tabbed-content docutils">
+<div class="figure align-default" style="width: 900px">
+<div class="cell_output docutils container">
+<img alt="../_images/01_uci_performance_17_1.png" src="../_images/01_uci_performance_17_1.png" />
+</div>
+</div>
+</div>
+<input id="a381bb4c-cf26-42c8-9f80-e27c28ebc660" name="ec9707c1-6288-457b-b0ba-7e6ac259ba69" type="radio">
+</input><label class="tabbed-label" for="a381bb4c-cf26-42c8-9f80-e27c28ebc660">
+all</label><div class="tabbed-content docutils">
+<div class="figure align-default" style="width: 900px">
+<div class="cell_output docutils container">
+<img alt="../_images/01_uci_performance_19_0.png" src="../_images/01_uci_performance_19_0.png" />
+</div>
+</div>
+</div>
+<input id="a28666d7-b8f1-4cff-ad78-f172968c9a3e" name="ec9707c1-6288-457b-b0ba-7e6ac259ba69" type="radio">
+</input><label class="tabbed-label" for="a28666d7-b8f1-4cff-ad78-f172968c9a3e">
+all shuffled </label><div class="tabbed-content docutils">
+<div class="figure align-default" style="width: 900px">
+<div class="cell_output docutils container">
+<img alt="../_images/01_uci_performance_19_1.png" src="../_images/01_uci_performance_19_1.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="../intro.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Analyses for the paper</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="02a_introspect_continuous_feat.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">2a Reason: Continuous Features</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Sami Hamdan<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

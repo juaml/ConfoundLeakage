@@ -1,0 +1,1182 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2b Reason: Low Precision Features &#8212; High Level Analyzes of Confound Regression Leaks</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/tabs.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Analysis 3: Real World Datasets Audio data" href="03_real_world.html" />
+    <link rel="prev" title="2a Reason: Continuous Features" href="02a_introspect_continuous_feat.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">High Level Analyzes of Confound Regression Leaks</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Analyses for the paper
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="01_uci_performance.html">
+   1 UCI Performance
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="02a_introspect_continuous_feat.html">
+   2a Reason: Continuous Features
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   2b Reason: Low Precision Features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="03_real_world.html">
+   Analysis 3: Real World Datasets Audio data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="04a_walk_through.html">
+   4a Walk Through Analyses with binary TaCo
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="04b_walk_through.html">
+   4b Walk Through Analyses with causal continuous confound
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        <a class="dropdown-buttons"
+            href="../_sources/content/02b_introspect_low_prec_feat.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/content/02b_introspect_low_prec_feat.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fcontent/02b_introspect_low_prec_feat.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/content/02b_introspect_low_prec_feat.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#starting-with-binary-feature">
+   Starting with binary feature
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>2b Reason: Low Precision Features</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#starting-with-binary-feature">
+   Starting with binary feature
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="b-reason-low-precision-features">
+<h1>2b Reason: Low Precision Features<a class="headerlink" href="#b-reason-low-precision-features" title="Permalink to this headline">¶</a></h1>
+<p>Here, I will analyze how low precision in the Features can influence confound-leakage
+The lowest precision of a feature would be binary 0 and 1, but later I will also look
+at precisions, where steps are lower than 1.</p>
+<p>Config like imports and path</p>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">ticker</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">joblib</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">RepeatedKFold</span><span class="p">,</span> <span class="n">KFold</span><span class="p">,</span> <span class="n">RepeatedStratifiedKFold</span>
+<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span><span class="p">,</span> <span class="n">DecisionTreeRegressor</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">dtreeviz.trees</span> <span class="kn">import</span> <span class="n">dtreeviz</span>
+
+<span class="kn">from</span> <span class="nn">leakconfound.plotting</span> <span class="kn">import</span> <span class="n">mm_to_inch</span>
+<span class="kn">from</span> <span class="nn">leakconfound.analyses.utils</span> <span class="kn">import</span> <span class="n">save_paper_val</span>
+
+<span class="kn">from</span> <span class="nn">sciplotlib</span> <span class="kn">import</span> <span class="n">style</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">6252006</span><span class="p">)</span>
+
+<span class="n">base_save_paper</span> <span class="o">=</span> <span class="s2">&quot;./paper_val/&quot;</span>
+<span class="n">base_dir</span> <span class="o">=</span> <span class="s1">&#39;../../&#39;</span>
+
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#E64B35&#39;</span><span class="p">,</span> <span class="s1">&#39;#4DBBD5&#39;</span><span class="p">,</span> <span class="s1">&#39;#00A087&#39;</span><span class="p">,</span> <span class="s1">&#39;#3C5488&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;#F39B7F&#39;</span><span class="p">,</span> <span class="s1">&#39;#8491B4&#39;</span><span class="p">,</span> <span class="s1">&#39;#91D1C2FF&#39;</span><span class="p">,</span> <span class="s1">&#39;#DC0000&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;#7E6148&#39;</span><span class="p">,</span> <span class="s1">&#39;#B09C85&#39;</span><span class="p">]</span>
+<span class="n">red</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">blue</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">green</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">purple</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+
+<span class="n">mpl</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">style</span><span class="o">.</span><span class="n">get_style</span><span class="p">(</span><span class="s1">&#39;nature-reviews&#39;</span><span class="p">))</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;xtick&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;ytick&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">titlesize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;figure&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;figure.subplot&#39;</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">hspace</span><span class="o">=</span><span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Define some functions to get distributions as I want to</p>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">convert_precision</span><span class="p">(</span><span class="n">original_nbr</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">.2</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">original_nbr</span> <span class="o">%</span> <span class="n">step</span> <span class="o">&gt;</span> <span class="n">step</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="p">(</span><span class="n">original_nbr</span><span class="o">//</span><span class="n">step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="p">(</span><span class="n">original_nbr</span><span class="o">//</span><span class="n">step</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="k">def</span> <span class="nf">normal_stepped</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">.2</span><span class="p">):</span>
+
+    <span class="n">df_normal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">),</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;feat_1&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">df_normal</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+        <span class="n">feat_2</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;feat_1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+            <span class="n">partial</span><span class="p">(</span><span class="n">convert_precision</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">))</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="starting-with-binary-feature">
+<h2>Starting with binary feature<a class="headerlink" href="#starting-with-binary-feature" title="Permalink to this headline">¶</a></h2>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">1_000</span><span class="p">)</span>
+<span class="n">feat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1_000</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">feat_1</span><span class="o">=</span><span class="n">feat</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">))</span>
+
+<span class="n">scores_1_no_rem</span><span class="p">,</span> <span class="n">est_no_removal</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">DecisionTreeRegressor</span><span class="p">(),</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">],</span>
+    <span class="n">preprocess_confounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">RepeatedKFold</span><span class="p">(),</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;r2&#39;</span><span class="p">,</span> <span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">,</span> <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span>
+<span class="p">)</span>
+<span class="n">scores_1_no_rem</span> <span class="o">=</span> <span class="n">scores_1_no_rem</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;repeat&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">test_score</span>
+
+<span class="n">scores_1</span><span class="p">,</span> <span class="n">est_removed</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">],</span> <span class="n">confounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;conf&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">DecisionTreeRegressor</span><span class="p">(),</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_confound&#39;</span><span class="p">],</span>
+    <span class="n">preprocess_confounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">RepeatedKFold</span><span class="p">(),</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;r2&#39;</span><span class="p">,</span> <span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">,</span> <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span>
+<span class="p">)</span>
+<span class="n">scores_1</span> <span class="o">=</span> <span class="n">scores_1</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;repeat&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">test_score</span>
+
+<span class="nb">print</span><span class="p">(</span>
+    <span class="s1">&#39;Scores random binary no removal feature  : M = &#39;</span>
+    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">scores_1_no_rem</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, sd = </span><span class="si">{</span><span class="n">scores_1_no_rem</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span>
+<span class="p">)</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_random_binary.txt&quot;</span><span class="p">,</span> <span class="n">scores_1_no_rem</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_random_binary.txt&quot;</span><span class="p">,</span> <span class="n">scores_1_no_rem</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="s1">&#39;Scores random binary confound removed feature  : M = &#39;</span>
+    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">scores_1</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, sd = </span><span class="si">{</span><span class="n">scores_1</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span>
+<span class="p">)</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_random_binary.txt&quot;</span><span class="p">,</span> <span class="n">scores_1</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_random_binary.txt&quot;</span><span class="p">,</span> <span class="n">scores_1</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Scores random binary no removal feature  : M = -0.0068, sd = 0.0034
+Scores random binary confound removed feature  : M = 0.9985, sd = 0.0003
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now let us have a closer look at what is going on</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">1_000</span><span class="p">)</span>
+<span class="n">feat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1_000</span><span class="p">)</span>
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">feat_1</span><span class="o">=</span><span class="n">feat</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">))</span>
+
+<span class="n">pred_rem</span> <span class="o">=</span> <span class="n">est_removed</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df_test</span><span class="p">[[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">,</span> <span class="s1">&#39;conf&#39;</span><span class="p">]])</span>
+<span class="n">pred_no_rem</span> <span class="o">=</span> <span class="n">est_no_removal</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df_test</span><span class="p">[[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">]])</span>
+
+<span class="n">X_prep_rem</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">est_removed</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">df_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]),</span> <span class="n">df_test</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+<span class="n">X_prep_no_rem</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">est_no_removal</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">df_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;conf&#39;</span><span class="p">]),</span> <span class="n">df_test</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+
+
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X_prep_no_rem</span><span class="p">[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">df_test</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">hue</span><span class="o">=</span><span class="n">pred_no_rem</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X_prep_no_rem</span><span class="p">[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">df_test</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">hue</span><span class="o">=</span><span class="n">pred_no_rem</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X_prep_rem</span><span class="p">[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">df_test</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">hue</span><span class="o">=</span><span class="n">pred_rem</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X_prep_rem</span><span class="p">[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">df_test</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">hue</span><span class="o">=</span><span class="n">pred_rem</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+
+<span class="c1"># color_map = sns.color_palette(m clpl.colors.Normalize(vmin=-1, vmax=1))</span>
+<span class="n">palette</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">diverging_palette</span><span class="p">(</span>
+    <span class="mi">145</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">as_cmap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="n">center</span><span class="o">=</span><span class="s2">&quot;dark&quot;</span><span class="p">,)</span>
+<span class="n">normalize</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X_prep_no_rem</span><span class="p">[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">df_test</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span>
+
+                <span class="n">hue</span><span class="o">=</span><span class="n">pred_no_rem</span><span class="p">,</span> <span class="n">hue_norm</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X_prep_rem</span><span class="p">[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">df_test</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+
+                <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span>
+                <span class="n">hue</span><span class="o">=</span><span class="n">pred_rem</span><span class="p">,</span> <span class="n">hue_norm</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_legend</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_legend</span><span class="p">()</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;prediction&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Binary Feature Raw&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Continuous TaCo&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Binary Feature CR&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./saved_figures/low_precision_sim.svg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/02b_introspect_low_prec_feat_9_0.png" src="../_images/02b_introspect_low_prec_feat_9_0.png" />
+<img alt="../_images/02b_introspect_low_prec_feat_9_1.png" src="../_images/02b_introspect_low_prec_feat_9_1.png" />
+</div>
+</div>
+<p>Investigating similar effect for continuous values rounded to a precision or not</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">step</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">1_000</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">normal_stepped</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;conf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target</span>
+
+<span class="n">scores_1</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">confounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;conf&#39;</span><span class="p">],</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">DecisionTreeRegressor</span><span class="p">(),</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_confound&#39;</span><span class="p">],</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">RepeatedKFold</span><span class="p">(),</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;r2&#39;</span><span class="p">,</span> <span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span>
+
+<span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;repeat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">test_score</span>
+
+<span class="n">scores_1_no_cr</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">DecisionTreeRegressor</span><span class="p">(),</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">],</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">RepeatedKFold</span><span class="p">(),</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;r2&#39;</span><span class="p">,</span> <span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span>
+
+<span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;repeat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">test_score</span>
+
+<span class="n">scores_2</span><span class="p">,</span> <span class="n">est_removed</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feat_2&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">confounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;conf&#39;</span><span class="p">],</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">DecisionTreeRegressor</span><span class="p">(),</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_confound&#39;</span><span class="p">],</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">RepeatedKFold</span><span class="p">(),</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;r2&#39;</span><span class="p">,</span>
+    <span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">,</span> <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">scores_2</span> <span class="o">=</span> <span class="n">scores_2</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;repeat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">test_score</span>
+
+<span class="n">scores_3</span><span class="p">,</span> <span class="n">est_no_removal</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feat_2&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">DecisionTreeRegressor</span><span class="p">(),</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">RepeatedKFold</span><span class="p">(),</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;r2&#39;</span><span class="p">,</span> <span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">,</span> <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span>
+<span class="p">)</span>
+<span class="n">scores_3</span> <span class="o">=</span> <span class="n">scores_3</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;repeat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">test_score</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scores Random confound no removal continuous Feature: M = &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">scores_1_no_cr</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, sd = </span><span class="si">{</span><span class="n">scores_1_no_cr</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scores Random confound removed continuous Feature: M = &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">scores_1</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, sd = </span><span class="si">{</span><span class="n">scores_1</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_random_continious_cont_target_not_rounded.txt&quot;</span><span class="p">,</span> <span class="n">scores_1_no_cr</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_random_continious_cont_target_not_rounded.txt&quot;</span><span class="p">,</span> <span class="n">scores_1_no_cr</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_random_continious_cont_target_not_rounded.txt&quot;</span><span class="p">,</span> <span class="n">scores_1</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_random_continious_cont_target_not_rounded.txt&quot;</span><span class="p">,</span> <span class="n">scores_1</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scores Random confound removed continuous Feature with&#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;precision of </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s1"> : M = &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">scores_2</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, sd = </span><span class="si">{</span><span class="n">scores_2</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span>
+      <span class="p">)</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_random_continious_cont_target_prec_rounded.txt&quot;</span><span class="p">,</span> <span class="n">scores_2</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_random_continious_cont_target_prec_rounded.txt&quot;</span><span class="p">,</span> <span class="n">scores_2</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scores Random no removal continuous Feature with &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;precision of </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s1"> : M = &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">scores_3</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, sd = </span><span class="si">{</span><span class="n">scores_3</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span>
+      <span class="p">)</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_random_continious_cont_target_prec_rounded.txt&quot;</span><span class="p">,</span> <span class="n">scores_3</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_random_continious_cont_target_prec_rounded.txt&quot;</span><span class="p">,</span> <span class="n">scores_3</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Scores Random confound no removal continuous Feature: M = -1.0989, sd = 0.0611
+Scores Random confound removed continuous Feature: M = -1.0280, sd = 0.0717
+Scores Random confound removed continuous Feature withprecision of 0.1 : M = 0.7041, sd = 0.1646
+Scores Random no removal continuous Feature with precision of 0.1 : M = -0.0845, sd = 0.0126
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">target_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">1_000</span><span class="p">)</span>
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">normal_stepped</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
+<span class="c1"># df_test.columns = [&#39;feat_2&#39;]</span>
+<span class="c1"># df_test[&#39;feat_1&#39;] = np.random.normal(size=1_000)</span>
+<span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_test</span>
+<span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;conf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_test</span>
+
+<span class="n">pred_rem</span> <span class="o">=</span> <span class="n">est_removed</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df_test</span><span class="p">[[</span><span class="s1">&#39;feat_2&#39;</span><span class="p">,</span> <span class="s1">&#39;conf&#39;</span><span class="p">]])</span>
+<span class="n">pred_no_rem</span> <span class="o">=</span> <span class="n">est_no_removal</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df_test</span><span class="p">[[</span><span class="s1">&#39;feat_2&#39;</span><span class="p">]])</span>
+
+<span class="n">X_prep_rem</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">est_removed</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">df_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;feat_1&#39;</span><span class="p">]),</span> <span class="n">df_test</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+<span class="n">X_prep_no_rem</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">est_no_removal</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">df_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;feat_1&#39;</span><span class="p">,</span> <span class="s1">&#39;conf&#39;</span><span class="p">]),</span> <span class="n">df_test</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+
+
+<span class="n">normalize</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X_prep_no_rem</span><span class="p">[</span><span class="s1">&#39;feat_2&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">df_test</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">hue</span><span class="o">=</span><span class="n">pred_no_rem</span><span class="p">,</span> <span class="n">hue_norm</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X_prep_no_rem</span><span class="p">[</span><span class="s1">&#39;feat_2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="mi">10</span><span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="mi">10</span><span class="p">))),</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">df_test</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">hue</span><span class="o">=</span><span class="n">pred_no_rem</span><span class="p">,</span> <span class="n">hue_norm</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X_prep_rem</span><span class="p">[</span><span class="s1">&#39;feat_2&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">df_test</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">hue</span><span class="o">=</span><span class="n">pred_rem</span><span class="p">,</span> <span class="n">hue_norm</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X_prep_rem</span><span class="p">[</span><span class="s1">&#39;feat_2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="mi">10</span><span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="mi">10</span><span class="p">))),</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">df_test</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">hue</span><span class="o">=</span><span class="n">pred_rem</span><span class="p">,</span> <span class="n">hue_norm</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_legend</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_legend</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_legend</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span>
+    <span class="mf">1.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Prediction of TaCo&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;No Removal&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;TaCo Removal&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Continuous Feature&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Continuous Feature&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Continuous TaCo&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Continuous TaCo&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
+
+<span class="n">axR0</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+<span class="n">axR0</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+<span class="n">axR0</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Complete Feature&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">270</span><span class="p">,</span>
+                <span class="n">labelpad</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">axR1</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+<span class="n">axR1</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+<span class="n">axR1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Only Fractional&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">270</span><span class="p">,</span>
+                <span class="n">labelpad</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./saved_figures/low_precision_cont_sim.svg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/02b_introspect_low_prec_feat_12_0.png" src="../_images/02b_introspect_low_prec_feat_12_0.png" />
+</div>
+</div>
+<p>same but now with a binary target:</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">1_000</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">normal_stepped</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;conf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target</span>
+
+<span class="n">scores_1</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">confounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;conf&#39;</span><span class="p">],</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">DecisionTreeClassifier</span><span class="p">(),</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_confound&#39;</span><span class="p">],</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">RepeatedStratifiedKFold</span><span class="p">(),</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span>
+
+<span class="p">)</span>
+<span class="n">scores_1</span> <span class="o">=</span> <span class="n">scores_1</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;repeat&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">test_score</span>
+
+<span class="n">scores_2</span><span class="p">,</span> <span class="n">est_removed</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feat_2&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">confounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;conf&#39;</span><span class="p">],</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">DecisionTreeClassifier</span><span class="p">(),</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_confound&#39;</span><span class="p">],</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">RepeatedStratifiedKFold</span><span class="p">(),</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">,</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">scores_2</span> <span class="o">=</span> <span class="n">scores_2</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;repeat&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">test_score</span>
+
+<span class="n">scores_3</span><span class="p">,</span> <span class="n">est_no_removal</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feat_2&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">DecisionTreeClassifier</span><span class="p">(),</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">],</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">RepeatedStratifiedKFold</span><span class="p">(),</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">,</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span>
+<span class="p">)</span>
+
+<span class="n">scores_3</span> <span class="o">=</span> <span class="n">scores_3</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;repeat&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">test_score</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scores Random confound removed continuous Feature Binary Target: M = &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">scores_1</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, sd = </span><span class="si">{</span><span class="n">scores_1</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_random_continious_bin_target_prec_1.txt&quot;</span><span class="p">,</span> <span class="n">scores_1</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_random_continious_bin_target_prec_1.txt&quot;</span><span class="p">,</span> <span class="n">scores_1</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scores Random confound removed continuous Feature with&#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;precision of </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s1"> Binary Target : M = &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">scores_2</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, sd = </span><span class="si">{</span><span class="n">scores_2</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span>
+      <span class="p">)</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_random_continious_bin_target_prec_2.txt&quot;</span><span class="p">,</span> <span class="n">scores_2</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_random_continious_bin_target_prec_2.txt&quot;</span><span class="p">,</span> <span class="n">scores_2</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scores Random no removal continuous Feature with &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;precision of </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s1"> Binary Target : M = &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">scores_3</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, sd = </span><span class="si">{</span><span class="n">scores_3</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span>
+      <span class="p">)</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_random_continious_bin_target_prec_3.txt&quot;</span><span class="p">,</span> <span class="n">scores_3</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_random_continious_bin_target_prec_3.txt&quot;</span><span class="p">,</span> <span class="n">scores_3</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Scores Random confound removed continuous Feature Binary Target: M = 0.4929, sd = 0.0113
+Scores Random confound removed continuous Feature withprecision of 0.1 Binary Target : M = 0.9836, sd = 0.0026
+Scores Random no removal continuous Feature with precision of 0.1 Binary Target : M = 0.5265, sd = 0.0089
+</pre></div>
+</div>
+</div>
+</div>
+<p>now to a real dataset example from UCI
+Heart dataset using a decision tree
+First, some info about the fitted model:</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">case</span> <span class="o">=</span> <span class="s1">&#39;heart___decisiontree___False___716845___num&#39;</span>
+<span class="n">model_no_rm</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">base_dir</span><span class="si">}</span><span class="s1">results/basic_TaCo/uci_datasets/models/</span><span class="si">{</span><span class="n">case</span><span class="si">}</span><span class="s1">.joblib&#39;</span>
+<span class="p">)</span>
+<span class="n">df_performance_no_rm</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">base_dir</span><span class="si">}</span><span class="s1">results/basic_TaCo/uci_datasets/</span><span class="si">{</span><span class="n">case</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Performance No removal M = </span><span class="si">{</span><span class="n">df_performance_no_rm</span><span class="o">.</span><span class="n">test_roc_auc</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">,&#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;sd=</span><span class="si">{</span><span class="n">df_performance_no_rm</span><span class="o">.</span><span class="n">test_roc_auc</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1"> .2f</span><span class="si">}</span><span class="s1">&#39;</span>
+      <span class="p">)</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_heart.txt&quot;</span><span class="p">,</span> <span class="n">df_performance_no_rm</span><span class="o">.</span><span class="n">test_roc_auc</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_heart.txt&quot;</span><span class="p">,</span> <span class="n">df_performance_no_rm</span><span class="o">.</span><span class="n">test_roc_auc</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="n">model_no_rm</span><span class="o">.</span><span class="n">named_steps</span><span class="o">.</span><span class="n">decisiontreeclassifier</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s1">&#39;Not removed has </span><span class="si">{</span><span class="n">model_no_rm</span><span class="o">.</span><span class="n">named_steps</span><span class="o">.</span><span class="n">decisiontreeclassifier</span><span class="o">.</span><span class="n">tree_</span><span class="o">.</span><span class="n">node_count</span><span class="si">}</span><span class="s1"> nodes&#39;</span><span class="p">)</span>
+
+<span class="n">case</span> <span class="o">=</span> <span class="s1">&#39;heart___decisiontree___True___716845___num&#39;</span>
+<span class="n">model_rm</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">base_dir</span><span class="si">}</span><span class="s1">results/basic_TaCo/uci_datasets/models/</span><span class="si">{</span><span class="n">case</span><span class="si">}</span><span class="s1">.joblib&#39;</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="n">model_rm</span><span class="o">.</span><span class="n">named_steps</span><span class="o">.</span><span class="n">decisiontreeclassifier</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s1">&#39;removed has </span><span class="si">{</span><span class="n">model_rm</span><span class="o">.</span><span class="n">named_steps</span><span class="o">.</span><span class="n">decisiontreeclassifier</span><span class="o">.</span><span class="n">tree_</span><span class="o">.</span><span class="n">node_count</span><span class="si">}</span><span class="s1"> nodes&#39;</span><span class="p">)</span>
+
+
+<span class="n">df_performance_rm</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">base_dir</span><span class="si">}</span><span class="s1">results/basic_TaCo/uci_datasets/</span><span class="si">{</span><span class="n">case</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Performance Removal M = </span><span class="si">{</span><span class="n">df_performance_rm</span><span class="o">.</span><span class="n">test_roc_auc</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">,&#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;sd=</span><span class="si">{</span><span class="n">df_performance_rm</span><span class="o">.</span><span class="n">test_roc_auc</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1"> .2f</span><span class="si">}</span><span class="s1">&#39;</span>
+      <span class="p">)</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_heart.txt&quot;</span><span class="p">,</span> <span class="n">df_performance_rm</span><span class="o">.</span><span class="n">test_roc_auc</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_heart.txt&quot;</span><span class="p">,</span> <span class="n">df_performance_rm</span><span class="o">.</span><span class="n">test_roc_auc</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">base_dir</span><span class="si">}</span><span class="s1">data/uci_datasets/</span><span class="si">{</span><span class="n">case</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;___&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;num__binary_target&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Performance No removal M = 0.74,sd= 0.06
+[0.18565167 0.0558061  0.09962636 0.11968048 0.04075426 0.
+ 0.00973236 0.00985401 0.01487661 0.         0.10911591 0.
+ 0.         0.         0.01448795 0.05085158 0.01216545 0.27739726
+ 0.         0.        ]
+Not removed has 115 nodes
+[0.         0.         0.         0.         0.         0.04285714
+ 0.         0.         0.         0.         0.         0.
+ 0.95714286 0.         0.         0.         0.         0.
+ 0.         0.        ]
+removed has 5 nodes
+Performance Removal M = 0.99,sd= 0.01
+</pre></div>
+</div>
+</div>
+</div>
+<p>preparing data to visualize parts of the DT</p>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">correct_dummy_name</span><span class="p">(</span><span class="n">dummy_column</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;names will be name__categorical_1, but should be name_1__categorical</span>
+<span class="sd">    so thate __categorical as type is still valid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dummy_column</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">column_type</span> <span class="o">=</span> <span class="n">dummy_column</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">)</span>
+        <span class="n">column_type</span><span class="p">,</span> <span class="n">number</span> <span class="o">=</span> <span class="n">column_type</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">column_type</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">return</span> <span class="n">dummy_column</span>
+
+
+<span class="n">confounds</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;num__categorical_confound__:type:__confound&#39;</span><span class="p">]</span>
+<span class="n">df_rm</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+         <span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;num__categorical_confound__:type:__confound&#39;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">num__binary_target</span><span class="p">})</span>
+         <span class="p">)</span>
+
+
+<span class="n">categorical</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span>
+               <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_rm</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+               <span class="k">if</span> <span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;categorical&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">col</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;nominal&#39;</span><span class="p">))</span>
+               <span class="p">]</span>
+<span class="n">categorical_non_bi</span> <span class="o">=</span> <span class="p">[</span><span class="n">cat</span>
+                      <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">categorical</span>
+                      <span class="k">if</span> <span class="n">df_rm</span><span class="p">[</span><span class="n">cat</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span>
+                      <span class="p">]</span>
+<span class="n">df_ohe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span>
+    <span class="n">df_rm</span><span class="p">[</span><span class="n">categorical</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">categorical_non_bi</span><span class="p">)</span>
+
+<span class="n">df_rm</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">categorical</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">categorical</span> <span class="o">=</span> <span class="p">[</span><span class="n">correct_dummy_name</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_ohe</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()]</span>
+<span class="n">df_rm</span><span class="p">[</span><span class="n">categorical</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_ohe</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span>
+     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_rm</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+     <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;categorical&#39;</span> <span class="ow">in</span> <span class="n">col</span> <span class="ow">and</span> <span class="s1">&#39;confound&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">col</span><span class="p">)</span> <span class="ow">or</span> <span class="n">col</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;continuous&#39;</span><span class="p">)</span>
+     <span class="p">]</span>
+
+
+<span class="n">df_removed</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">model_rm</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span>
+    <span class="n">df_rm</span><span class="p">[</span><span class="n">X</span><span class="o">+</span><span class="n">confounds</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">df_rm</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+<span class="n">X_names</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">X_names</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Fasting Blood Sugar&#39;</span>
+<span class="n">X_names</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Resting Electrocardiographic Results (0 vs. Rest)&#39;</span>
+
+<span class="n">dt_colors</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="kc">None</span><span class="p">,</span>  <span class="c1"># 0 classes</span>
+    <span class="kc">None</span><span class="p">,</span>  <span class="c1"># 1 class</span>
+    <span class="p">[</span><span class="n">green</span><span class="p">,</span> <span class="n">purple</span><span class="p">],</span>  <span class="c1"># 2 classes</span>
+
+<span class="p">]</span>
+<span class="n">viz</span> <span class="o">=</span> <span class="n">dtreeviz</span><span class="p">(</span><span class="n">model_rm</span><span class="p">[</span><span class="s1">&#39;decisiontreeclassifier&#39;</span><span class="p">],</span>
+               <span class="n">df_removed</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="n">y</span><span class="p">],</span>
+               <span class="n">target_name</span><span class="o">=</span><span class="s1">&#39;Heart Disease&#39;</span><span class="p">,</span> <span class="n">feature_names</span><span class="o">=</span><span class="n">X_names</span><span class="o">+</span><span class="n">confounds</span><span class="p">,</span>
+               <span class="n">histtype</span><span class="o">=</span><span class="s1">&#39;strip&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+               <span class="n">colors</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;classes&#39;</span><span class="p">:</span> <span class="n">dt_colors</span><span class="p">},</span> <span class="n">class_names</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;not diagnosed&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;diagnosed&#39;</span><span class="p">}</span>
+               <span class="p">)</span>
+
+<span class="n">viz</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;./saved_figures/dt_heart.svg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family [&#39;Arial&#39;] not found. Falling back to DejaVu Sans.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family [&#39;Arial&#39;] not found. Falling back to DejaVu Sans.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family [&#39;Arial&#39;] not found. Falling back to DejaVu Sans.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>findfont: Font family [&#39;Arial&#39;] not found. Falling back to DejaVu Sans.
+</pre></div>
+</div>
+</div>
+</div>
+<p>plot nodes as swarm plots</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_discont</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">hue</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">left_lim</span><span class="p">,</span> <span class="n">right_lim</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+    <span class="n">df_left</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">X</span><span class="si">}</span><span class="s1"> &lt; </span><span class="si">{</span><span class="n">left_lim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">df_right</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">X</span><span class="si">}</span><span class="s1"> &gt; </span><span class="si">{</span><span class="n">right_lim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_left</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_right</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+    <span class="n">df_right</span><span class="p">[</span><span class="s1">&#39;ccount&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_right</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">cumcount</span><span class="p">()</span>
+    <span class="n">y_value_counts_right</span> <span class="o">=</span> <span class="n">df_right</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+
+    <span class="n">df_right</span><span class="p">[</span><span class="s1">&#39;plot_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">df_right</span>
+        <span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;ccount&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">y_value_counts_right</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="n">y</span><span class="p">]],</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">df_left</span><span class="p">[</span><span class="s1">&#39;ccount&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_left</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">cumcount</span><span class="p">()</span>
+    <span class="n">y_value_counts_left</span> <span class="o">=</span> <span class="n">df_left</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+    <span class="n">df_left</span><span class="p">[</span><span class="s1">&#39;plot_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">df_left</span>
+        <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;ccount&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">y_value_counts_left</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="n">y</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">palette_left</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">colors</span><span class="p">)[</span><span class="n">y_value_counts_left</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">])</span>
+    <span class="n">palette_right</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">colors</span><span class="p">)[</span><span class="n">y_value_counts_right</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">])</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;plot_y&#39;</span><span class="p">,</span>  <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">df_left</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette_left</span><span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;plot_y&#39;</span><span class="p">,</span>  <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">df_right</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette_right</span><span class="p">)</span>
+
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">left_lim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">left_lim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">get_legend</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">spines</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># ax2</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">spines</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">tick_left</span><span class="p">()</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">right_lim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">right_lim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">d</span> <span class="o">=</span> <span class="mf">1.5</span>  <span class="c1"># proportion of vertical to horizontal extent of the slanted line</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">marker</span><span class="o">=</span><span class="p">[(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">d</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="p">)],</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+                  <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">mec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">mew</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax2</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># titles</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span>
+
+
+<span class="n">df_removed</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">y</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plot_discont</span><span class="p">(</span><span class="s1">&#39;restecg_1__categorical&#39;</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+                               <span class="n">df_removed</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mf">.03</span><span class="p">,</span> <span class="mf">.002</span><span class="p">),</span> <span class="p">(</span><span class="mf">.958</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                               <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="n">green</span><span class="p">,</span> <span class="n">purple</span><span class="p">],</span>
+                               <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Feature: Restecg Category 1 vs Rest&#39;</span>
+
+                               <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;threshold=&quot;</span><span class="p">,</span> <span class="n">model_rm</span><span class="o">.</span><span class="n">named_steps</span><span class="o">.</span><span class="n">decisiontreeclassifier</span><span class="o">.</span><span class="n">tree_</span><span class="o">.</span><span class="n">threshold</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=-</span><span class="mf">.015</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="o">-</span><span class="mf">.03</span><span class="p">,</span> <span class="o">-</span><span class="mf">.015</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">purple</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="mf">0.03</span><span class="p">))</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="mf">0.03</span><span class="p">))</span>
+
+<span class="c1"># visuals as we will make it smaller later we increase size</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Feature: Restecg Category 1 vs Rest&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">y_ground</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span><span class="o">.</span><span class="n">transform</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">y_text</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span><span class="o">.</span><span class="n">transform</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">.1</span><span class="p">])[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s2">&quot;-0.015&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">.015</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">.015</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.045</span><span class="p">),</span>
+
+             <span class="n">xycoords</span><span class="o">=</span><span class="n">ax1</span><span class="o">.</span><span class="n">get_xaxis_transform</span><span class="p">(),</span>
+             <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span>
+             <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+             <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+             <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;round&quot;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+             <span class="n">weight</span><span class="o">=</span><span class="s2">&quot;semibold&quot;</span>
+
+             <span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./saved_figures/heart_restecg__cat_1.svg&#39;</span><span class="p">)</span>
+<span class="n">fig</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>threshold= [-0.01459854 -2.         -0.14233577 -2.         -2.        ]
+</pre></div>
+</div>
+<img alt="../_images/02b_introspect_low_prec_feat_20_1.png" src="../_images/02b_introspect_low_prec_feat_20_1.png" />
+<img alt="../_images/02b_introspect_low_prec_feat_20_2.png" src="../_images/02b_introspect_low_prec_feat_20_2.png" />
+</div>
+</div>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mask_selection</span> <span class="o">=</span> <span class="n">df_removed</span><span class="p">[</span><span class="s1">&#39;restecg_1__categorical&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">.015</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plot_discont</span><span class="p">(</span><span class="s1">&#39;restecg_2__categorical&#39;</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+                               <span class="n">df_removed</span><span class="p">[</span><span class="n">mask_selection</span><span class="p">],</span>
+                               <span class="p">(</span><span class="o">-</span><span class="mf">.6</span><span class="p">,</span> <span class="o">-</span><span class="mf">.22</span><span class="p">),</span> <span class="p">(</span><span class="mf">.38</span><span class="p">,</span> <span class="mf">.7</span><span class="p">),</span>
+                               <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="n">green</span><span class="p">,</span> <span class="n">purple</span><span class="p">],</span>
+                               <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Feature: Restecg Category 2 vs Rest&#39;</span>
+                               <span class="p">)</span>
+
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=-</span><span class="mf">.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="o">-</span><span class="mf">.6</span><span class="p">,</span> <span class="o">-</span><span class="mf">.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">purple</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="o">-</span><span class="mf">.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">.1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">green</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="mf">.35</span><span class="p">,</span> <span class="mf">.7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">green</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="mf">0.1</span><span class="p">))</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">MultipleLocator</span><span class="p">(</span><span class="mf">0.1</span><span class="p">))</span>
+
+<span class="c1"># visuals as we will make it smaller later we increase size</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Feature: Restecg Category 2 vs Rest&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s2">&quot;-0.5&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">.5</span><span class="p">,</span> <span class="mf">.01</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.045</span><span class="p">),</span>
+             <span class="n">xycoords</span><span class="o">=</span><span class="n">ax1</span><span class="o">.</span><span class="n">get_xaxis_transform</span><span class="p">(),</span>
+             <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span>
+             <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+             <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+             <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;round&quot;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+             <span class="n">weight</span><span class="o">=</span><span class="s2">&quot;semibold&quot;</span>
+
+             <span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./saved_figures/heart_restecg__cat_2.svg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/02b_introspect_low_prec_feat_21_0.png" src="../_images/02b_introspect_low_prec_feat_21_0.png" />
+</div>
+</div>
+<p>simulations to the impact of small changes in features leading to leakage
+we only change one feature value per fold to 1 or 0 where it was 0 or 1 respectivley
+both taget and feature are here binary
+These simulations use only KFold for instead of Repeated KFold</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">500</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">feat_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">250</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="n">feat_2</span> <span class="o">=</span> <span class="n">feat_1</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="mi">97</span><span class="p">,</span> <span class="mi">98</span><span class="p">,</span> <span class="mi">197</span><span class="p">,</span> <span class="mi">198</span><span class="p">,</span> <span class="mi">297</span><span class="p">,</span> <span class="mi">298</span><span class="p">,</span> <span class="mi">397</span><span class="p">,</span> <span class="mi">398</span><span class="p">,</span> <span class="mi">497</span><span class="p">,</span> <span class="mi">498</span><span class="p">,</span> <span class="mi">597</span><span class="p">,</span> <span class="mi">598</span><span class="p">,</span>
+                  <span class="mi">697</span><span class="p">,</span> <span class="mi">698</span><span class="p">,</span> <span class="mi">797</span><span class="p">,</span> <span class="mi">798</span><span class="p">,</span> <span class="mi">897</span><span class="p">,</span> <span class="mi">898</span><span class="p">,</span> <span class="mi">997</span><span class="p">,</span> <span class="mi">998</span><span class="p">],</span>
+                 <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">feat_2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ii</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">feat_1</span><span class="o">=</span><span class="n">feat_1</span><span class="p">,</span>
+                       <span class="n">feat_2</span><span class="o">=</span><span class="n">feat_2</span><span class="p">,</span>
+                       <span class="n">conf</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">9464508</span><span class="p">)</span>
+<span class="n">scores_1</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">DecisionTreeClassifier</span><span class="p">(),</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span>
+
+<span class="p">)</span>
+<span class="n">scores_1</span> <span class="o">=</span> <span class="n">scores_1</span><span class="o">.</span><span class="n">test_score</span>
+
+<span class="n">scores_2</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feat_2&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">DecisionTreeClassifier</span><span class="p">(),</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span>
+<span class="p">)</span>
+
+<span class="n">scores_2</span> <span class="o">=</span> <span class="n">scores_2</span><span class="o">.</span><span class="n">test_score</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No Removal:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scores Feat 1 (balanced): M = &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">scores_1</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, sd = </span><span class="si">{</span><span class="n">scores_1</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_carefully_constructed_balanced.txt&quot;</span><span class="p">,</span> <span class="n">scores_1</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_carefully_constructed_balanced.txt&quot;</span><span class="p">,</span> <span class="n">scores_1</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scores Feat 2 (conditional feature imbalance to TaCo in each fold): M = &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">scores_2</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, sd = </span><span class="si">{</span><span class="n">scores_2</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_carefully_constructed.txt&quot;</span><span class="p">,</span> <span class="n">scores_2</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_carefully_constructed.txt&quot;</span><span class="p">,</span> <span class="n">scores_2</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No Removal:
+Scores Feat 1 (balanced): M = 0.5000, sd = 0.0000
+Scores Feat 2 (conditional feature imbalance to TaCo in each fold): M = 0.5200, sd = 0.0000
+</pre></div>
+</div>
+</div>
+</div>
+<p>now we do the same but with TaCo removal</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results_1</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feat_1&#39;</span><span class="p">],</span> <span class="n">confounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;conf&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">DecisionTreeClassifier</span><span class="p">(),</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_confound&#39;</span><span class="p">],</span>
+    <span class="n">preprocess_confounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span>
+
+<span class="p">)</span>
+<span class="n">score_1</span> <span class="o">=</span> <span class="n">results_1</span><span class="o">.</span><span class="n">test_score</span>
+
+<span class="n">results_2</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feat_2&#39;</span><span class="p">],</span> <span class="n">confounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;conf&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">DecisionTreeClassifier</span><span class="p">(),</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_confound&#39;</span><span class="p">],</span>
+    <span class="n">preprocess_confounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span>
+
+<span class="p">)</span>
+<span class="n">scores_2</span> <span class="o">=</span> <span class="n">results_2</span><span class="o">.</span><span class="n">test_score</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="s1">&#39;Scores Feat 1 (balanced): M = &#39;</span>
+    <span class="sa">f</span><span class="s1">&#39;Mean = </span><span class="si">{</span><span class="n">scores_1</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, sd = </span><span class="si">{</span><span class="n">scores_1</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="s1">&#39;Scores Feat 2 (conditional feature imbalance to TaCo in each folds): &#39;</span>
+    <span class="sa">f</span><span class="s1">&#39;Mean = </span><span class="si">{</span><span class="n">scores_2</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, sd = </span><span class="si">{</span><span class="n">scores_2</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span>
+
+<span class="p">)</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_carefully_constructed_balanced.txt&quot;</span><span class="p">,</span> <span class="n">scores_1</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_carefully_constructed_balanced.txt&quot;</span><span class="p">,</span> <span class="n">scores_1</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;mean_carefully_constructed.txt&quot;</span><span class="p">,</span> <span class="n">scores_2</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="n">save_paper_val</span><span class="p">(</span><span class="n">base_save_paper</span><span class="p">,</span> <span class="s2">&quot;reasons_low_perc&quot;</span><span class="p">,</span> <span class="s2">&quot;removed&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;std_carefully_constructed.txt&quot;</span><span class="p">,</span> <span class="n">scores_2</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Scores Feat 1 (balanced): M = Mean = 0.5000, sd = 0.0000 
+Scores Feat 2 (conditional feature imbalance to TaCo in each folds): Mean = 1.0000, sd = 0.0000
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="02a_introspect_continuous_feat.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">2a Reason: Continuous Features</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="03_real_world.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Analysis 3: Real World Datasets Audio data</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Sami Hamdan<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>
