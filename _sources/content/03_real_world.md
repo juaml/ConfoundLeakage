@@ -12,7 +12,7 @@ kernelspec:
 ---
 
 +++
-# Analysis 3: Real World Datasets Audio data
+# Analysis 3: Real World Datasets Audio Data
 
 Imports, Functs and Paths
 
@@ -134,7 +134,7 @@ print(f"pointbiserialr, r={corr:.2},p={p:.2}")
 ```
 
 +++
-Performance TaCo with original data
+## Performance TaCo with Original Data
 
 ```{code-cell}
 :tags: [hide-input]
@@ -179,7 +179,7 @@ save_paper_val(base_save_paper, "real_world", "removed",
 ```
 
 +++
-Performance TaCo with shuffled data
+## Performance TaCo with Shuffled Data
 
 
 ```{code-cell}
@@ -249,7 +249,7 @@ df_long_shuffled_non_TaCo = (
 ```
 
 +++
-Performance for each confound separated
+## Performance for each Confound Separated
 
 
 ```{code-cell}

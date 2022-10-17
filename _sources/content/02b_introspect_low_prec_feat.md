@@ -13,7 +13,7 @@ kernelspec:
 
 +++
 # 2b Reason: Low Precision Features
-Here, I will analyze how low precision in the Features can influence confound-leakage
+Here, I will analyze how low precision in the features can influence confound-leakage.
 The lowest precision of a feature would be binary 0 and 1, but later I will also look
 at precisions, where steps are lower than 1.
 
@@ -100,7 +100,7 @@ def normal_stepped(size, step=.2):
 ```
 
 +++
-## Starting with binary feature
+## Starting with Binary Feature
 
 
 
@@ -182,7 +182,6 @@ sns.scatterplot(x=X_prep_rem['feat_1'].apply(lambda x: x-int(x)),
 
 fig, axes = plt.subplots(1, 2, figsize=[10, 5])
 
-# color_map = sns.color_palette(m clpl.colors.Normalize(vmin=-1, vmax=1))
 palette = sns.diverging_palette(
     145, 300, s=100, as_cmap=True,  center="dark",)
 normalize = mpl.colors.Normalize(vmin=-3, vmax=3)
@@ -209,7 +208,7 @@ fig.savefig('./saved_figures/low_precision_sim.svg')
 ```
 
 +++
-Investigating similar effect for continuous values rounded to a precision or not
+## Investigating similar Effect for Continuous Values Rounded to a Precision or Not
 
 
 ```{code-cell}
@@ -431,7 +430,7 @@ save_paper_val(base_save_paper, "reasons_low_perc", "removed",
 ```
 
 +++
-now to a real dataset example from UCI
+Now to a real dataset example from UCI
 Heart dataset using a decision tree
 First, some info about the fitted model:
 
@@ -487,7 +486,7 @@ y = 'num__binary_target'
 ```
 
 +++
-preparing data to visualize parts of the DT
+Preparing data to visualize parts of the DT
 
 
 ```{code-cell}
@@ -700,9 +699,9 @@ fig.savefig('./saved_figures/heart_restecg__cat_2.svg')
 ```
 
 +++
-simulations to the impact of small changes in features leading to leakage
-we only change one feature value per fold to 1 or 0 where it was 0 or 1 respectivley
-both taget and feature are here binary
+Simulations: Impact of Small Changes in Features Leading to Leakage.
+We only change one feature value per fold to 1 or 0 where it was 0 or 1 respectivley
+both taget and feature are here binary.
 These simulations use only KFold for instead of Repeated KFold
 
 ```{code-cell}
@@ -760,7 +759,7 @@ save_paper_val(base_save_paper, "reasons_low_perc", "raw",
 ```
 
 +++
-now we do the same but with TaCo removal
+Now we do the same but with TaCo removal
 
 
 

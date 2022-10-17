@@ -129,7 +129,7 @@ arguments_TaCo.extend(['confound'])
 ```
 
 +++
-Subset TaCo data
+Subset TaCo Data
 
 ```{code-cell}
 :tags: [hide-input, hide-output]
@@ -157,7 +157,7 @@ df_plot_TaCo_shuffled_selected = (df_TaCo_shuffled
 ```
 
 +++
-Data Retrieval non TaCo -> simulated confounds
+Data Retrieval non TaCo -> Simulated Confounds
 
 
 ```{code-cell}
@@ -229,7 +229,7 @@ df_plot_non_TaCo_shuffled_selected = (df_plot_non_TaCo_shuffled
 ```
 
 +++
-clean & correct Repeat and Fold & Scoring
+Clean & Correct Repeat and Fold & Scoring
 
 ```{code-cell}
 :tags: [hide-input, hide-output]
@@ -246,7 +246,7 @@ df_plot_non_TaCo_shuffled_selected = correct_columns(df_plot_non_TaCo_shuffled_s
 ```
 
 +++
-Create a function to plot
+Create a Function to Plot
 
 
 ```{code-cell}
@@ -378,7 +378,7 @@ def plot_performance(df_TaCo, df_non_TaCo, figsize=None, model_label_dict=None,
 ```
 
 +++
-# Plotting Performance for Selected Datapoints
+## Plotting Performance for Selected Datapoints
 
 
 
@@ -416,7 +416,7 @@ glue("uci_selected_shuffled", fig_shuffled_selected, display=False)
 ```
 
 +++
-# Plotting Performance for All Datapoints
+## Plotting Performance for all Datapoints
 
 
 
@@ -429,9 +429,7 @@ all_model_dict = {
     'Neural Network': 'MLP',
     'Linear SVM': 'Lin SVM',
     'RBF SVM': 'RBF SVM',
-    'Baseline Model': 'Chance Level',
-
-
+    'Baseline Model': 'Chance',
 }
 with mpl.rc_context({
     'figure.subplot.wspace': mm_to_inch(4),

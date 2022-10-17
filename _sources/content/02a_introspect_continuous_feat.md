@@ -14,7 +14,7 @@ kernelspec:
 +++
 # 2a Reason: Continuous Features
 
-imports
+Imports
 
 ```{code-cell}
 :tags: [hide-input, hide-output]
@@ -45,7 +45,7 @@ from leakconfound.plotting.settings import red, blue, green, purple
 ```
 
 +++
-prepare paths
+Prepare Paths
 
 
 ```{code-cell}
@@ -59,7 +59,7 @@ Path(increase_features_save_paper).mkdir(parents=True, exist_ok=True)
 ```
 
 +++
-prepare plotting
+Prepare Plotting
 
 
 
@@ -74,13 +74,13 @@ mpl.rc('figure.subplot', wspace=mm_to_inch(4), hspace=mm_to_inch(10))
 mpl.rc('lines', linewidth=1)
 np.random.seed(891236740)
 
-# using two normal distributions
+# using two Normal Distributions
 
 
 ```
 
 +++
-Functions to sample from distributions
+Functions to Sample from Distributions
 
 
 ```{code-cell}
@@ -107,8 +107,8 @@ skewed_sampler = partial(chi2.rvs, df=3)
 ```
 
 +++
-#Features with opposing small extreme distributions
-prepare data
+#Features with Opposing Small Extreme Distributions
+Prepare Data
 
 
 ```{code-cell}
@@ -127,7 +127,7 @@ df = pd.DataFrame(dict(
 ```
 
 +++
-run analysis
+Run Analysis
 
 
 ```{code-cell}
@@ -152,7 +152,7 @@ res_rem, est_rem = run_cross_validation(
 ```
 
 +++
-cv scores
+CV Scores
 
 
 ```{code-cell}
@@ -179,7 +179,7 @@ save_paper_val(base_save_paper, "reasons_continuous_feat", "removed",
 ```
 
 +++
-## score on additional test sample & plotting
+## Score on Additional Test Sample & Plotting
 
 
 
@@ -310,9 +310,9 @@ pred_all_val_rm = est_rem.named_steps.decisiontreeclassifier.predict(
 ```
 
 +++
-## score on additional test sample wihtout extreme dist
+## Score on Additional Test Sample Without Extreme Distributions
 Testing performance on addition test set only using a normal dist
-This shows whether increase in performance is due to leaage or only better
+This shows whether increase in performance is due to leackage or only better
 pred of extreme values
 
 
@@ -348,7 +348,7 @@ save_paper_val(base_save_paper, "reasons_continuous_feat", "removed",
 ```
 
 +++
-# Real world example
+### Real World Example
 Now we can look at an example with real data:
 For this we will look at the real_estate dataset
 
@@ -574,7 +574,7 @@ fig
 ```
 
 +++
-Analysing the effect of random features
+#Analysing The Effect of Random Features
 Either normal distributed or following chi2
 
 

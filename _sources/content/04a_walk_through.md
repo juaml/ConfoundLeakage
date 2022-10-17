@@ -12,7 +12,7 @@ kernelspec:
 ---
 
 +++
-# 4a Walk Through Analyses with binary TaCo
+# 4a Walk Through Analyses with Binary TaCo
 
 Imports & path variables etc
 
@@ -73,7 +73,7 @@ dt_colors = [
 ```
 
 +++
-define functions for plotting
+Define functions for plotting
 
 
 ```{code-cell}
@@ -155,7 +155,7 @@ def plot_discont(X, hue, data, left_lim, right_lim, colors=None, title=''):
 ```
 
 +++
-prepare data
+Prepare data
 
 ```{code-cell}
 :tags: [hide-input, hide-output]
@@ -175,7 +175,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 ```
 
 +++
-Standardize, Shuffle, add Noise for suppression
+Standardize, Shuffle, add Noise for Suppression
 
 
 ```{code-cell}
@@ -223,7 +223,7 @@ X_test_suppression_shuffled["noise__:type:__confound"] = noise
 ```
 
 +++
-remove TaCo
+#  Remove TaCo
 
 ```{code-cell}
 :tags: [hide-input, hide-output]
@@ -543,11 +543,11 @@ fig2.savefig(f"{out_base}/dt_taco_default.png")
 ```
 
 +++
-compute, model and score on Xhat
+Compute, model and score on Xhat
 
 ```{code-cell}
 :tags: [hide-input]
-# score plots
+# Score plots
 
 est_removal = CR.models_confound_
 
@@ -577,10 +577,11 @@ save_paper_val(base_save_paper, "walk_through_binary", "removed",
                "dt_Xhat.txt", score_Xhat)
 print("Xhat scored:", score_Xhat)
 
-# # %% [markdown]
-# Plotting
-
 ```
+
++++
+Plotting
+
 
 ```{code-cell}
 :tags: [hide-input, hide-output]
@@ -588,13 +589,13 @@ train_hight = len(X_train)/len(df)
 test_hight = 1 - train_hight
 fig_grid = fig = plt.figure(figsize=(25, 20))
 
-# preparig axis according to
+# Preparig axis according to
 axd = {
     name: plt.subplots(figsize=[mm_to_inch(80), mm_to_inch(40)])[1]
     for name in list("ABCDFGHIEKJL")
 }
 
-# score X
+# Score X
 axd['K'].bar(["X"], [score_X], color=blue)
 axd["K"].set_ylim(0, 1)
 axd['L'].bar([r"$X_{CR}$", r"$\hat{X}$"], [score_Xcr, score_Xhat], color=blue)
@@ -605,7 +606,7 @@ axd["L"].set_ylim(0, 1)
 ```{code-cell}
 :tags: [hide-input, hide-output]
 # Styling
-# remove feature names, index from most plots
+# Remove feature names, index from most plots
 
 
 important_raw_features = dt_raw.feature_importances_ > 0

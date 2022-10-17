@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>1 UCI Performance &#8212; High Level Analyzes of Confound Regression Leaks</title>
+    <title>1 UCI Performance &#8212; High Level Analyses of Confound Regression Leaks</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -80,7 +80,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <h1 class="site-logo" id="site-title">High Level Analyzes of Confound Regression Leaks</h1>
+      <h1 class="site-logo" id="site-title">High Level Analyses of Confound Regression Leaks</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -113,12 +113,12 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="03_real_world.html">
-   Analysis 3: Real World Datasets Audio data
+   Analysis 3: Real World Datasets Audio Data
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="04a_walk_through.html">
-   4a Walk Through Analyses with binary TaCo
+   4a Walk Through Analyses with Binary TaCo
   </a>
  </li>
  <li class="toctree-l1">
@@ -186,11 +186,11 @@ const thebe_selector_output = ".output, .cell_output"
         aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
     <div class="dropdown-buttons sourcebuttons">
         <a class="repository-button"
-            href="https://github.com/executablebooks/jupyter-book"><button type="button" class="btn btn-secondary topbarbtn"
+            href="https://github.com/juaml/ConfoundLeakage"><button type="button" class="btn btn-secondary topbarbtn"
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fcontent/01_uci_performance.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/juaml/ConfoundLeakage/issues/new?title=Issue%20on%20page%20%2Fcontent/01_uci_performance.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -211,7 +211,7 @@ const thebe_selector_output = ".output, .cell_output"
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/content/01_uci_performance.md"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/juaml/ConfoundLeakage/master?urlpath=tree/content/01_uci_performance.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="../_static/images/logo_binder.svg"
@@ -233,34 +233,25 @@ const thebe_selector_output = ".output, .cell_output"
             </div>
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   1 UCI Performance
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#set-mpl-settings">
+   Set MPL Settings
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#set-mpl-settings">
-     Set MPL Settings
-    </a>
-   </li>
-  </ul>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#plotting-performance-for-selected-datapoints">
    Plotting Performance for Selected Datapoints
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#plotting-performance-for-all-datapoints">
-   Plotting Performance for All Datapoints
+   Plotting Performance for all Datapoints
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#these-are-the-figures">
-     These are the Figures
-    </a>
-   </li>
-  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#these-are-the-figures">
+   These are the Figures
+  </a>
  </li>
 </ul>
 
@@ -282,34 +273,25 @@ const thebe_selector_output = ".output, .cell_output"
                         </div>
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   1 UCI Performance
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#set-mpl-settings">
+   Set MPL Settings
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#set-mpl-settings">
-     Set MPL Settings
-    </a>
-   </li>
-  </ul>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#plotting-performance-for-selected-datapoints">
    Plotting Performance for Selected Datapoints
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#plotting-performance-for-all-datapoints">
-   Plotting Performance for All Datapoints
+   Plotting Performance for all Datapoints
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#these-are-the-figures">
-     These are the Figures
-    </a>
-   </li>
-  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#these-are-the-figures">
+   These are the Figures
+  </a>
  </li>
 </ul>
 
@@ -424,7 +406,7 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 </div>
-<p>Subset TaCo data</p>
+<p>Subset TaCo Data</p>
 <div class="cell tag_hide-input tag_hide-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">order</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Linear/Logistic&quot;</span><span class="p">,</span> <span class="s2">&quot;Decision Tree&quot;</span><span class="p">,</span>
@@ -450,7 +432,7 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 </div>
-<p>Data Retrieval non TaCo -&gt; simulated confounds</p>
+<p>Data Retrieval non TaCo -&gt; Simulated Confounds</p>
 <div class="cell tag_hide-input tag_hide-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">prepare_non_TaCo</span><span class="p">(</span><span class="n">shuffled</span><span class="p">):</span>
@@ -520,7 +502,7 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 </div>
-<p>clean &amp; correct Repeat and Fold &amp; Scoring</p>
+<p>Clean &amp; Correct Repeat and Fold &amp; Scoring</p>
 <div class="cell tag_hide-input tag_hide-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_plot_TaCo</span> <span class="o">=</span> <span class="n">correct_columns</span><span class="p">(</span><span class="n">df_TaCo</span><span class="p">)</span>
@@ -536,7 +518,7 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 </div>
-<p>Create a function to plot</p>
+<p>Create a Function to Plot</p>
 <div class="cell tag_hide-input tag_hide-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_performance</span><span class="p">(</span><span class="n">df_TaCo</span><span class="p">,</span> <span class="n">df_non_TaCo</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_label_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -665,9 +647,8 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 </div>
-</div>
-<div class="tex2jax_ignore mathjax_ignore section" id="plotting-performance-for-selected-datapoints">
-<h1>Plotting Performance for Selected Datapoints<a class="headerlink" href="#plotting-performance-for-selected-datapoints" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="plotting-performance-for-selected-datapoints">
+<h2>Plotting Performance for Selected Datapoints<a class="headerlink" href="#plotting-performance-for-selected-datapoints" title="Permalink to this headline">¶</a></h2>
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig_selected</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plot_performance</span><span class="p">(</span>
@@ -700,8 +681,8 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 </div>
-<div class="tex2jax_ignore mathjax_ignore section" id="plotting-performance-for-all-datapoints">
-<h1>Plotting Performance for All Datapoints<a class="headerlink" href="#plotting-performance-for-all-datapoints" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="plotting-performance-for-all-datapoints">
+<h2>Plotting Performance for all Datapoints<a class="headerlink" href="#plotting-performance-for-all-datapoints" title="Permalink to this headline">¶</a></h2>
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_model_dict</span> <span class="o">=</span> <span class="p">{</span>
@@ -711,9 +692,7 @@ const thebe_selector_output = ".output, .cell_output"
     <span class="s1">&#39;Neural Network&#39;</span><span class="p">:</span> <span class="s1">&#39;MLP&#39;</span><span class="p">,</span>
     <span class="s1">&#39;Linear SVM&#39;</span><span class="p">:</span> <span class="s1">&#39;Lin SVM&#39;</span><span class="p">,</span>
     <span class="s1">&#39;RBF SVM&#39;</span><span class="p">:</span> <span class="s1">&#39;RBF SVM&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Baseline Model&#39;</span><span class="p">:</span> <span class="s1">&#39;Chance Level&#39;</span><span class="p">,</span>
-
-
+    <span class="s1">&#39;Baseline Model&#39;</span><span class="p">:</span> <span class="s1">&#39;Chance&#39;</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="k">with</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rc_context</span><span class="p">({</span>
     <span class="s1">&#39;figure.subplot.wspace&#39;</span><span class="p">:</span> <span class="n">mm_to_inch</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
@@ -759,11 +738,12 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 </div>
+</div>
 <div class="section" id="these-are-the-figures">
 <h2>These are the Figures<a class="headerlink" href="#these-are-the-figures" title="Permalink to this headline">¶</a></h2>
 <div class="tabbed-set docutils">
-<input checked="checked" id="655c56c2-1453-4870-9b98-fbbc65d04813" name="ec9707c1-6288-457b-b0ba-7e6ac259ba69" type="radio">
-</input><label class="tabbed-label" for="655c56c2-1453-4870-9b98-fbbc65d04813">
+<input checked="checked" id="a0aa02d5-bc04-44a8-bd42-7a30a1af925c" name="11c77952-1d06-47f9-b709-7b3983d87056" type="radio">
+</input><label class="tabbed-label" for="a0aa02d5-bc04-44a8-bd42-7a30a1af925c">
 selected</label><div class="tabbed-content docutils">
 <div class="figure align-default" style="width: 900px">
 <div class="cell_output docutils container">
@@ -771,8 +751,8 @@ selected</label><div class="tabbed-content docutils">
 </div>
 </div>
 </div>
-<input id="aacd0c80-912b-4d13-8331-d00cf83ee292" name="ec9707c1-6288-457b-b0ba-7e6ac259ba69" type="radio">
-</input><label class="tabbed-label" for="aacd0c80-912b-4d13-8331-d00cf83ee292">
+<input id="dc152f10-0cf4-47fa-981f-f0e908891913" name="11c77952-1d06-47f9-b709-7b3983d87056" type="radio">
+</input><label class="tabbed-label" for="dc152f10-0cf4-47fa-981f-f0e908891913">
 selected shuffled </label><div class="tabbed-content docutils">
 <div class="figure align-default" style="width: 900px">
 <div class="cell_output docutils container">
@@ -780,8 +760,8 @@ selected shuffled </label><div class="tabbed-content docutils">
 </div>
 </div>
 </div>
-<input id="a381bb4c-cf26-42c8-9f80-e27c28ebc660" name="ec9707c1-6288-457b-b0ba-7e6ac259ba69" type="radio">
-</input><label class="tabbed-label" for="a381bb4c-cf26-42c8-9f80-e27c28ebc660">
+<input id="67edd5f0-d454-4928-9731-224e061f7b3d" name="11c77952-1d06-47f9-b709-7b3983d87056" type="radio">
+</input><label class="tabbed-label" for="67edd5f0-d454-4928-9731-224e061f7b3d">
 all</label><div class="tabbed-content docutils">
 <div class="figure align-default" style="width: 900px">
 <div class="cell_output docutils container">
@@ -789,8 +769,8 @@ all</label><div class="tabbed-content docutils">
 </div>
 </div>
 </div>
-<input id="a28666d7-b8f1-4cff-ad78-f172968c9a3e" name="ec9707c1-6288-457b-b0ba-7e6ac259ba69" type="radio">
-</input><label class="tabbed-label" for="a28666d7-b8f1-4cff-ad78-f172968c9a3e">
+<input id="02793e5e-22cd-4cd7-9e89-bf077c76f313" name="11c77952-1d06-47f9-b709-7b3983d87056" type="radio">
+</input><label class="tabbed-label" for="02793e5e-22cd-4cd7-9e89-bf077c76f313">
 all shuffled </label><div class="tabbed-content docutils">
 <div class="figure align-default" style="width: 900px">
 <div class="cell_output docutils container">
