@@ -107,7 +107,7 @@ skewed_sampler = partial(chi2.rvs, df=3)
 ```
 
 +++
-#Features with Opposing Small Extreme Distributions
+## Features with Opposing Small Extreme Distributions
 Prepare Data
 
 
@@ -574,7 +574,7 @@ fig
 ```
 
 +++
-#Analysing The Effect of Random Features
+## Analysing The Effect of Random Features
 Either normal distributed or following chi2
 
 

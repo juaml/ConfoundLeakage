@@ -234,6 +234,11 @@ const thebe_selector_output = ".output, .cell_output"
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#features-with-opposing-small-extreme-distributions">
+   Features with Opposing Small Extreme Distributions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#score-on-additional-test-sample-plotting">
    Score on Additional Test Sample &amp; Plotting
   </a>
@@ -249,6 +254,11 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#analysing-the-effect-of-random-features">
+   Analysing The Effect of Random Features
+  </a>
  </li>
 </ul>
 
@@ -271,6 +281,11 @@ const thebe_selector_output = ".output, .cell_output"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#features-with-opposing-small-extreme-distributions">
+   Features with Opposing Small Extreme Distributions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#score-on-additional-test-sample-plotting">
    Score on Additional Test Sample &amp; Plotting
   </a>
@@ -286,6 +301,11 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#analysing-the-effect-of-random-features">
+   Analysing The Effect of Random Features
+  </a>
  </li>
 </ul>
 
@@ -380,8 +400,9 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 </div>
-<p>#Features with Opposing Small Extreme Distributions
-Prepare Data</p>
+<div class="section" id="features-with-opposing-small-extreme-distributions">
+<h2>Features with Opposing Small Extreme Distributions<a class="headerlink" href="#features-with-opposing-small-extreme-distributions" title="Permalink to this headline">¶</a></h2>
+<p>Prepare Data</p>
 <div class="cell tag_hide-input tag_hide-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">500</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
@@ -448,6 +469,7 @@ Prepare Data</p>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Scores no removal: M = 0.5106, sd = 0.0107
 Scores with removal: M = 0.5834, sd = 0.0130
 </pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -974,8 +996,11 @@ dtype: object
 <img alt="../_images/02a_introspect_continuous_feat_30_0.png" src="../_images/02a_introspect_continuous_feat_30_0.png" />
 </div>
 </div>
-<p>#Analysing The Effect of Random Features
-Either normal distributed or following chi2</p>
+</div>
+</div>
+<div class="section" id="analysing-the-effect-of-random-features">
+<h2>Analysing The Effect of Random Features<a class="headerlink" href="#analysing-the-effect-of-random-features" title="Permalink to this headline">¶</a></h2>
+<p>Either normal distributed or following chi2</p>
 <div class="cell tag_hide-input tag_hide-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
@@ -1324,7 +1349,6 @@ Either normal distributed or following chi2</p>
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/02a_introspect_continuous_feat_39_0.png" src="../_images/02a_introspect_continuous_feat_39_0.png" />
-</div>
 </div>
 </div>
 </div>
