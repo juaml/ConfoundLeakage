@@ -1,5 +1,7 @@
-# Cnfound-Leakage: Confound Removal In Machine Learing Leads To Leakage
+# Confound-Leakage: Confound Removal In Machine Learing Leads To Leakage
 In this repo I am uploading the code and instructions for replication for the paper. 
+To have a look at how the paper's plots and anlyses were created see: [Analyses](https://juaml.github.io/ConfoundLeakage/)
+
 
 
 ## What you need 
