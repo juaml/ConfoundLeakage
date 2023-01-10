@@ -16,7 +16,8 @@ To have a look at how the paper's plots and anlyses were created see: [Analyses]
     * Many datasets are downloaded directly from UCI Repo, but the following once need to be downloaded in put into `./data/raw/`:
         * [/bank-additional/bank-additional-full.csv](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing)
         * [/raw/student/student-mat.csv](https://archive.ics.uci.edu/ml/datasets/Student+Performance)
-        student
+        student   
+   So, please go to the UCI repository following the links above, next click on `Data Folder`. Here, you will find .zip files with the same name as the .csv you see above. Dowload and unzip them. Lastly, create a `./data/raw/` folder (if not existing yet) and put .csv into it. 
 2. Run data preparation script: `./00_prepare_data.sh`
 3. Run experiments: `./01_condor_submission.sh`:    
     * For exact reproduction:
