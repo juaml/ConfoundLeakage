@@ -30,3 +30,18 @@ To have a look at how the paper's plots and anlyses were created see: [Analyses]
 4. Now you can create the jupyter book to get an overview of the anaysis by using: 
     * `bash ./02_build_analyses.sh`
     * or run the python script in the hydro style inside of `./analyses/content/`
+    
+   
+## Overview used UCI datasets (with links):
+* [Income (Adult)]( https://archive.ics.uci.edu/ml/datasets/Adult)
+* [Bank Marketing](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing)
+* [Heart](https://archive.ics.uci.edu/ml/datasets/heart+disease)
+* [Blood Transfusion](https://archive.ics.uci.edu/ml/datasets/Blood+Transfusion+Service+Center)
+* [Breast Cancer](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+%28Diagnostic%29)
+* [Student Performance](https://archive.ics.uci.edu/ml/datasets/Student+Performance)
+* [Abalone](https://archive.ics.uci.edu/ml/datasets/Abalone)
+* [Concrete Compressive Strength](https://archive.ics.uci.edu/ml/datasets/concrete+compressive+strength)
+* [Residential Building](https://archive.ics.uci.edu/ml/datasets/Residential+Building+Data+Set)
+* [Real Estate](https://archive.ics.uci.edu/ml/datasets/Real+estate+valuation+data+set)
+
+
