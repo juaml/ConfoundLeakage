@@ -8,6 +8,10 @@ chapters:
 - file: content/01_uci_performance
 - file: content/02a_introspect_continuous_feat
 - file: content/02b_introspect_low_prec_feat
-- file: content/03_real_world
+- file: content/02c_introspect_extra_added_feat
+- file: content/03a_real_world
+- file: content/03b_real_world_permutation_test
+- file: content/03c_real_world_feature_importance
+- file: content/03d_real_world_grouped
 - file: content/04a_walk_through
 - file: content/04b_walk_through
