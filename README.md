@@ -6,6 +6,8 @@ To have a look at how the paper's plots and anlyses were created see: [Analyses]
 
 ## What you need 
 * python3: please install python and all the requirements (`pip install -r requirements.txt`)
+** I did run the analyses again while revising the manuscript using sklearn=1.1 to get some new visualisations
+So, you need to update to that as well if you want all visualisations to work
 * The data comes from the UCI repository.
 * Computation infrastructure: This repo uses an HTCondor server to submit jobs. You can run all scripts manually on any modern machine, but it could take some time without some copute cluster
 
