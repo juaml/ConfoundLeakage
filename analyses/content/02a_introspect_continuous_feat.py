@@ -41,6 +41,9 @@ from leakconfound.plotting import mm_to_inch
 from leakconfound.analyses.utils import save_paper_val
 from leakconfound.plotting.settings import red, blue, green, purple
 
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 # %% [markdown]
 # Prepare Paths
@@ -541,7 +544,8 @@ for i in feat_nbr:
         cv=RepeatedKFold(),
         scoring='r2', problem_type='regression'
 
-    ).test_score
+    )
+    scores_no_rem = scores_no_rem.groupby('repeat')['test_score'].mean()
     all_scores_no_rem.append(scores_no_rem.mean())
     all_yerr_no_rem.append(scores_no_rem.std())
 
@@ -553,7 +557,8 @@ for i in feat_nbr:
         scoring='r2', problem_type='regression'
 
 
-    ).test_score
+    )
+    scores_rem = scores_rem.groupby('repeat')['test_score'].mean()
 
     save_paper_val(increase_features_save_paper,
                    "reasons_continuous_feat", "raw",
@@ -653,7 +658,8 @@ for i in feat_nbr:
         cv=RepeatedKFold(),
         scoring='r2', problem_type='regression'
 
-    ).test_score
+    )
+    scores_no_rem = scores_no_rem.groupby('repeat')['test_score'].mean()
     all_scores_no_rem.append(scores_no_rem.mean())
     all_yerr_no_rem.append(scores_no_rem.std())
 
@@ -665,7 +671,9 @@ for i in feat_nbr:
         scoring='r2', problem_type='regression'
 
 
-    ).test_score
+    )
+
+    scores_rem = scores_rem.groupby('repeat')['test_score'].mean()
 
     save_paper_val(increase_features_save_paper,
                    "reasons_continuous_feat", "raw",

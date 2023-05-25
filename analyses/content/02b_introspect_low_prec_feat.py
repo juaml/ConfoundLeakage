@@ -42,6 +42,9 @@ from leakconfound.analyses.utils import save_paper_val
 
 from sciplotlib import style
 
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 # %%  tags=["hide-input", "hide-output"]
 np.random.seed(6252006)
 

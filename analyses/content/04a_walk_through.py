@@ -42,6 +42,10 @@ from cairosvg import svg2png
 
 from leakconfound.analyses.utils import save_paper_val
 from leakconfound.plotting import mm_to_inch
+from leakconfound.transformers import Shuffle
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 mpl.style.use(style.get_style('nature-reviews'))
 mpl.rc('xtick', labelsize=11)
@@ -93,9 +97,10 @@ def plot_scatter(x, y, df, threshold, ax=None, **kwargs):
                 verticalalignment='top',
                 ha="center",
                 arrowprops=dict(arrowstyle="->", color="grey", linewidth=1),
-                bbox=dict(boxstyle="round", fc="w", color="grey"), fontsize=9,
+                bbox=dict(boxstyle="round", fc="w", color="grey"), fontsize=15,
                 weight="semibold"
                 )
+    ax.tick_params(axis='both', which='major', labelsize=20)
 
 
 def plot_discont(X, hue, data, left_lim, right_lim, colors=None, title=''):
@@ -174,11 +179,13 @@ X_train = pd.DataFrame(zscore.transform(X_train),
 X_test = pd.DataFrame(zscore.transform(X_test),
                       columns=col_names[:-1]
                       )
-
-zscore_shuffled = StandardScaler().fit(np.random.permutation(X_train), y_train)
-X_train_shuffled = pd.DataFrame(zscore.transform(X_train),
+shuffler = Shuffle().fit(X_train)
+X_train_shuffled = shuffler.transform(X_train)
+zscore_shuffled = StandardScaler().fit(X_train_shuffled, y_train)
+X_train_shuffled = pd.DataFrame(zscore.transform(X_train_shuffled),
                                 columns=col_names[:-1])
-X_test_shuffled = pd.DataFrame(zscore.transform(np.random.permutation(X_test)),
+X_test_shuffled = shuffler.transform(X_test)
+X_test_shuffled = pd.DataFrame(zscore.transform(X_test_shuffled),
                                columns=col_names[:-1]
                                )
 
@@ -186,13 +193,16 @@ noise = np.random.normal(scale=2, size=(len(X_train), 1))
 X_train_suppression = X_train + noise
 
 
+# %% tags=["hide-input", "hide-output"]
+shuffler_suppression = Shuffle().fit(X_train_suppression)
+X_train_suppression_shuffled = shuffler_suppression.transform(X_train_suppression)
 zscore_supression_shuffled = StandardScaler().fit(
-    np.random.permutation(X_train_suppression), y_train)
-x_train_suppression_shuffled = pd.DataFrame(zscore.transform(X_train),
+    X_train_suppression_shuffled, y_train)
+X_train_suppression_shuffled = pd.DataFrame(zscore.transform(X_train_suppression_shuffled),
                                             columns=col_names[:-1]) + noise
 
 X_train_suppression["noise__:type:__confound"] = noise
-x_train_suppression_shuffled["noise__:type:__confound"] = noise
+X_train_suppression_shuffled["noise__:type:__confound"] = noise
 
 
 noise = np.random.normal(scale=2, size=(len(X_test), 1))
@@ -200,8 +210,9 @@ noise = np.random.normal(scale=2, size=(len(X_test), 1))
 
 X_test_suppression = X_test + noise
 
+X_test_suppression_shuffled = shuffler_suppression.transform(X_test_suppression)
 X_test_suppression_shuffled = pd.DataFrame(
-    zscore.transform(np.random.permutation(X_test)),
+    zscore.transform(X_test_suppression_shuffled),
     columns=col_names[:-1]
 ) + noise
 
@@ -223,7 +234,7 @@ def prep_taco(X, y):
 CR = DataFrameConfoundRemover().fit(prep_taco(X_train, y_train))
 CR_shuffled = DataFrameConfoundRemover().fit(prep_taco(X_train_shuffled, y_train))
 CR_suppression = DataFrameConfoundRemover().fit(X_train_suppression, y_train)
-CR_suppression_shuffled = DataFrameConfoundRemover().fit(x_train_suppression_shuffled, y_train)
+CR_suppression_shuffled = DataFrameConfoundRemover().fit(X_train_suppression_shuffled, y_train)
 
 
 X_train_TaCo = CR.transform(prep_taco(X_train, y_train))
@@ -238,7 +249,7 @@ X_test_TaCo_shuffled = CR_shuffled.transform(prep_taco(X_test_shuffled, y_test))
 X_train_CR_suppression = CR_suppression.transform(X_train_suppression)
 X_test_CR_suppression = CR_suppression.transform(X_test_suppression)
 
-x_train_CR_suppression_shuffled = CR_suppression_shuffled.transform(x_train_suppression_shuffled)
+x_train_CR_suppression_shuffled = CR_suppression_shuffled.transform(X_train_suppression_shuffled)
 X_test_CR_suppression_shuffled = CR_suppression_shuffled.transform(X_test_suppression_shuffled)
 
 
@@ -304,7 +315,7 @@ save_paper_val(base_save_paper, "walk_through_binary", "removed",
 
 # %% tags=["hide-input"]
 print("shuffled suppression")
-dt_raw_sup_shuff = DecisionTreeClassifier(max_depth=2).fit(x_train_suppression_shuffled, y_train)
+dt_raw_sup_shuff = DecisionTreeClassifier(max_depth=2).fit(X_train_suppression_shuffled, y_train)
 score_X_sup_shuff = auc_scorer(dt_raw_sup_shuff, X_test_suppression_shuffled, y_test)
 print("Raw", score_X_sup_shuff)
 
@@ -375,7 +386,7 @@ df_test_plot = (X_test.assign(y=y_test.values).iloc[idx, :]
 
                 )
 # thresholds from here:
-print(export_text(dt_raw, X_test.columns.to_list()))
+print(export_text(dt_raw, feature_names=X_test.columns.to_list()))
 fig, ax = plt.subplots()
 threshold = -.51
 plot_scatter(x="duration", y="y",
@@ -446,8 +457,8 @@ ax1.axvspan(-.48, -.453, color=green, alpha=.2)
 ax1.axvspan(-.453, -.39, color=purple, alpha=.2)
 ax2.axvspan(.76, 2.5, color=purple, alpha=.2)
 
-ax1.tick_params(axis='both', which='major', labelsize=9)
-ax2.tick_params(axis='both', which='major', labelsize=9)
+ax1.tick_params(axis='both', which='major', labelsize=20)
+ax2.tick_params(axis='both', which='major', labelsize=20)
 
 ax1.annotate("-0.453", xy=(-.453, .01), xytext=(-.453, -0.045),
              xycoords=ax1.get_xaxis_transform(),
@@ -476,8 +487,8 @@ ax12.axvspan(-.7, -.439, color=green, alpha=.2)
 ax12.axvspan(-.439, -.11, color=purple, alpha=.2)
 ax22.axvspan(2.01, 2.5, color=purple, alpha=.2)
 
-ax12.tick_params(axis='both', which='major', labelsize=9)
-ax22.tick_params(axis='both', which='major', labelsize=9)
+ax12.tick_params(axis='both', which='major', labelsize=20)
+ax22.tick_params(axis='both', which='major', labelsize=20)
 
 ax12.annotate("-0.439", xy=(-.439, .01), xytext=(-.439, -0.045),
               xycoords=ax12.get_xaxis_transform(),

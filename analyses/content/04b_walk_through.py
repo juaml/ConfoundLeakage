@@ -29,11 +29,14 @@ import matplotlib as mpl
 from matplotlib.lines import Line2D
 from leakconfound.analyses.utils import save_paper_val
 from leakconfound.plotting import mm_to_inch
-from leakconfound.transformers import Shuffle
+from leakconfound.transformers import Shuffle, WithingGroupShuffle
 from sciplotlib import style
 
 from myst_nb import glue
 
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 base_save_paper = "./paper_val/"
 
 mpl.style.use(style.get_style('nature-reviews'))
@@ -127,8 +130,16 @@ X_train_shuffled["conf__:type:__confound"] = X_train["conf__:type:__confound"]
 X_test_shuffled["conf__:type:__confound"] = X_test["conf__:type:__confound"]
 
 
+within_shuffler = WithingGroupShuffle(grouping_var="conf__:type:__confound").fit(X_train, y_train)
+X_train_within_shuffled = within_shuffler.transform(X_train)
+X_test_within_shuffled = within_shuffler.transform(X_test)
+
+X_train_within_shuffled["conf__:type:__confound"] = X_train["conf__:type:__confound"]
+X_test_within_shuffled["conf__:type:__confound"] = X_test["conf__:type:__confound"]
 CR = DataFrameConfoundRemover().fit(X_train, y_train)
+
 CR_shuffled = DataFrameConfoundRemover().fit(X_train_shuffled, y_train)
+CR_within_shuffled = DataFrameConfoundRemover().fit(X_train_within_shuffled, y_train)
 
 X_train_CR = CR.transform(X_train)
 X_test_CR = CR.transform(X_test)
@@ -142,6 +153,12 @@ X_test_shuffled_CR = CR_shuffled.transform(X_test_shuffled)
 X_train_shuffled_raw = X_train_shuffled.drop(columns=["conf__:type:__confound"])
 X_test_shuffled_raw = X_test_shuffled.drop(columns=["conf__:type:__confound"])
 
+X_train_within_shuffled_CR = CR_within_shuffled.transform(X_train_within_shuffled)
+X_test_within_shuffled_CR = CR_within_shuffled.transform(X_test_within_shuffled)
+
+X_train_within_shuffled_raw = X_train_within_shuffled.drop(columns=["conf__:type:__confound"])
+X_test_within_shuffled_raw = X_test_within_shuffled.drop(columns=["conf__:type:__confound"])
+
 # %% [markdown]
 # model and score data using DT Regressor
 
@@ -150,11 +167,16 @@ dt_no_CR = DecisionTreeRegressor(max_depth=2).fit(X_train_raw, y_train)
 dt_CR = DecisionTreeRegressor(max_depth=2).fit(X_train_CR, y_train)
 dt_shuffled_no_CR = DecisionTreeRegressor(max_depth=2).fit(X_train_shuffled_raw, y_train)
 dt_shuffled_CR = DecisionTreeRegressor(max_depth=2).fit(X_train_shuffled_CR, y_train)
+dt_within_shuffled_no_CR = (DecisionTreeRegressor(max_depth=2)
+                            .fit(X_train_within_shuffled_raw, y_train))
+dt_within_shuffled_CR = DecisionTreeRegressor(max_depth=2).fit(X_train_within_shuffled_CR, y_train)
 
 dt_score_no_CR = dt_no_CR.score(X_test_raw, y_test)
 dt_score_CR = dt_CR.score(X_test_CR, y_test)
 dt_score_shuffled_no_CR = dt_shuffled_no_CR.score(X_test_shuffled_raw, y_test)
 dt_score_shuffled_CR = dt_shuffled_CR.score(X_test_shuffled_CR, y_test)
+dt_score_within_shuffled_no_CR = dt_within_shuffled_no_CR.score(X_test_within_shuffled_raw, y_test)
+dt_score_within_shuffled_CR = dt_within_shuffled_CR.score(X_test_within_shuffled_CR, y_test)
 
 print(f"{dt_score_no_CR = }")
 save_paper_val(base_save_paper,
@@ -183,6 +205,18 @@ save_paper_val(base_save_paper,
                "removed", "dt_shuffled.txt",
                dt_score_shuffled_CR)
 
+print(f"{dt_score_within_shuffled_no_CR = }")
+save_paper_val(base_save_paper,
+               "walk_through_continuous",
+               "not_removed", "dt_within_shuffled.txt",
+               dt_score_within_shuffled_no_CR
+               )
+
+print(f"{dt_score_within_shuffled_CR = }")
+save_paper_val(base_save_paper,
+               "walk_through_continuous",
+               "removed", "dt_within_shuffled.txt",
+               dt_score_within_shuffled_CR)
 # %% [markdown]
 # Analyzes on Xhat
 

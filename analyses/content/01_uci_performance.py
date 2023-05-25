@@ -39,6 +39,10 @@ from leakconfound.plotting.settings import red, blue, green
 from leakconfound.analyses.load import (
     prepare_performance_data, gather_data, data_to_long, data_renamer, models_renamer)
 
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
+
 # %% [markdown]
 # ## Set MPL Settings
 
@@ -258,21 +262,22 @@ def plot_performance(df_TaCo, df_non_TaCo, figsize=None, model_label_dict=None,
     for (i_row, row_val) in enumerate(row_vals):  # ,
         # enumerate(col_vals)):
         ax = axes[i_row, 0]
-        data = df_TaCo.query(
+        data = (df_TaCo.query(
             '(score_name in ["test_r2", "test_roc_auc"] ) & '
-            f'({row} == @row_val)'
+            f'({row} == @row_val)')
+            .query("confound in ['not removed', 'removed']")
         )
         score_names = data.score_name.unique()
         # assert len(score_names) == 1
         score_name = score_names[0]
 
         custom_bar_rope_plot(x, y, hue,
-                             comparisons=(('X hat', 'not removed'), ('not removed', 'removed')),
-                             comparisons_sing_y=[1.1, 1.15],
+                             comparisons=(('not removed', 'removed'),),
+                             comparisons_sing_y=[1.15],
                              cv_repeats='repeat', data=data,
                              hue_order=hue_order,
                              order=list(used_model_dict.keys()),
-                             palette=sns.color_palette([green, blue, red]),
+                             palette=sns.color_palette([blue, red]),
                              ax=ax, show_legend=False,
                              rope_sign_fontsize=rope_sign_fontsize, rope_line_width=.5,
                              rope=0.05
@@ -303,12 +308,12 @@ def plot_performance(df_TaCo, df_non_TaCo, figsize=None, model_label_dict=None,
         data = df_non_TaCo.query(
             f'(model_name == "Random Forest") & ({row} == @row_val)')
         custom_bar_rope_plot('conf_corr', y, hue,
-                             comparisons=(('X hat', 'not removed'), ('not removed', 'removed')),
-                             comparisons_sing_y=[1.1, 1.15],
+                             comparisons=(('not removed', 'removed'),),
+                             comparisons_sing_y=[1.15],
                              cv_repeats='repeat', data=data,
                              hue_order=hue_order,
                              order=['0.2', '0.4', '0.6', '0.8'],
-                             palette=sns.color_palette([green, blue, red]),
+                             palette=sns.color_palette([blue, red]),
                              rope_sign_fontsize=rope_sign_fontsize,
                              rope_line_width=.5,
                              ax=ax, show_legend=False,
@@ -335,7 +340,6 @@ def plot_performance(df_TaCo, df_non_TaCo, figsize=None, model_label_dict=None,
                        )
 
         handles = [
-            mpl.patches.Patch(color=green,  label=r'$\hat{X}$'),
             mpl.patches.Patch(color=blue,  label='$X$'),
             mpl.patches.Patch(color=red, label='$X_{CR}$')
         ]
@@ -353,11 +357,13 @@ def plot_performance(df_TaCo, df_non_TaCo, figsize=None, model_label_dict=None,
 
 # %% tags=["hide-input", "remove-output"]
 
-
+df_plot_TaCo_selected = df_plot_TaCo_selected.query("confound in ['not removed', 'removed']")
+df_plot_non_TaCo_selected = df_plot_non_TaCo_selected.query(
+    "confound in ['not removed', 'removed']")
 fig_selected, axes = plot_performance(
     df_plot_TaCo_selected,
     df_plot_non_TaCo_selected,
-    hue_order=["X hat", "not removed", "removed"],
+    hue_order=["not removed", "removed"],
     figsize=[mm_to_inch(183),
              mm_to_inch(140)])
 
@@ -367,10 +373,14 @@ fig_selected.savefig('./saved_figures/uci_performance.png')
 
 glue("uci_selected", fig_selected, display=False)
 
+df_plot_TaCo_shuffled_selected = df_plot_TaCo_shuffled_selected.query(
+    "confound in ['not removed', 'removed']")
+df_plot_non_TaCo_shuffled_selected = df_plot_non_TaCo_shuffled_selected.query(
+    "confound in ['not removed', 'removed']")
 fig_shuffled_selected, axes = plot_performance(
     df_plot_TaCo_shuffled_selected,
     df_plot_non_TaCo_shuffled_selected,
-    hue_order=["X hat", "not removed", "removed"],
+    hue_order=["not removed", "removed"],
     figsize=[mm_to_inch(183),
              mm_to_inch(140)])
 
@@ -395,6 +405,8 @@ all_model_dict = {
     'RBF SVM': 'RBF SVM',
     'Baseline Model': 'Chance',
 }
+df_plot_TaCo = df_plot_TaCo.query("confound in ['not removed', 'removed']")
+df_plot_non_TaCo = df_plot_non_TaCo.query("confound in ['not removed', 'removed']")
 with mpl.rc_context({
     'figure.subplot.wspace': mm_to_inch(4),
     'figure.subplot.hspace': mm_to_inch(2)
@@ -405,7 +417,7 @@ with mpl.rc_context({
         figsize=[mm_to_inch(183),
                  mm_to_inch(280)],
         model_label_dict=all_model_dict,
-        hue_order=["X hat", "not removed", "removed"],
+        hue_order=["not removed", "removed"],
 
     )
     axes[-1, 0].set_xticklabels(axes[-1, 0].get_xticklabels(), rotation=90)
@@ -416,6 +428,9 @@ glue("uci_all", fig_all, display=False)
 fig_all.savefig('./saved_figures/uci_performance_all.svg')
 fig_all.savefig('./saved_figures/uci_performance_all.png')
 
+df_plot_TaCo_shuffled = df_plot_TaCo_shuffled.query("confound in ['not removed', 'removed']")
+df_plot_non_TaCo_shuffled = df_plot_non_TaCo_shuffled.query(
+    "confound in ['not removed', 'removed']")
 with mpl.rc_context({
     'figure.subplot.wspace': mm_to_inch(4),
     'figure.subplot.hspace': mm_to_inch(2)
@@ -426,7 +441,7 @@ with mpl.rc_context({
         figsize=[mm_to_inch(183),
                  mm_to_inch(280)],
         model_label_dict=all_model_dict,
-        hue_order=["X hat", "not removed", "removed"],
+        hue_order=["not removed", "removed"],
 
     )
     axes[-1, 0].set_xticklabels(axes[-1, 0].get_xticklabels(), rotation=90)

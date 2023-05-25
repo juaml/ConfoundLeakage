@@ -14,7 +14,7 @@
 # ---
 
 # %% [markdown]
-# # Analysis 3: Real World Datasets Audio Data
+# # Analysis 3a: Real World Datasets Audio Data
 
 # Imports, Functs and Paths
 # %% tags=["hide-input", "hide-output"]
@@ -30,6 +30,10 @@ from leakconfound.plotting import custom_bar_rope_plot
 from leakconfound.analyses.utils import save_paper_val
 
 import matplotlib as mpl
+
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 base_save_paper = "./paper_val/"
 results_base = '../../results/'
@@ -355,31 +359,34 @@ df_bar_plot = pd.concat([
 ]).dropna().reset_index(drop=True)
 
 
+df_bar_plot = (df_bar_plot
+               .query("confound in ['not removed', 'removed']")
+               )
 fig, ax = plt.subplots()
 custom_bar_rope_plot(
     x='confounds_used', y='score', hue='confound', ax=ax,
-    hue_order=["X hat", "not removed", "removed"],
-    comparisons=(('X hat', 'not removed'), ("not removed", "removed"),),
-    comparisons_sing_y=(1.05, 1.1,),
+    hue_order=["not removed", "removed"],
+    comparisons=(("not removed", "removed"),),
+    comparisons_sing_y=(1.1,),
     cv_repeats="repeat", data=df_bar_plot,
     rope=0.05, order=["Gender", "Education", "Age", "BDI",
                       "Gender_Education_Age_BDI", "TaCo"],
-    palette=sns.color_palette([green, blue, red]),
+    palette=sns.color_palette([blue, red]),
     show_legend=False
 )
 ax.set_xticklabels([i.get_text().replace("_", " ") for i in ax.get_xticklabels()],
                    rotation=15, ha="right")
 ax.set_ylim(0, 1.1)
 ax.set_ylabel("AUCROC")
+ax.set_xlabel("Confounds Used")
 
 handles = [
-    mpl.patches.Patch(color=green,  label=r'$\hat{X}$'),
     mpl.patches.Patch(color=blue,  label='$X$'),
     mpl.patches.Patch(color=red, label='$X_{CR}$')
 ]
 
 fig.legend(handles=handles,
-           title="Original Features:",
+           title="Original Features",
            loc='upper center',
            bbox_to_anchor=(0.5, 1.05),
            ncol=3,)
@@ -403,24 +410,28 @@ df_bar_plot_shuffled = pd.concat([
 
 
 fig, ax = plt.subplots()
+df_bar_plot_shuffled = (df_bar_plot_shuffled
+                        .query("confound in ['not removed', 'removed']")
+                        )
 custom_bar_rope_plot(
     x='confounds_used', y='score', hue='confound', ax=ax,
-    hue_order=["X hat", "not removed", "removed"],
-    comparisons=(('X hat', 'not removed'), ("not removed", "removed"),),
-    comparisons_sing_y=(1.05, 1.1,),
+    hue_order=["not removed", "removed"],
+    comparisons=(("not removed", "removed"),),
+    comparisons_sing_y=(1.1,),
     cv_repeats="repeat", data=df_bar_plot_shuffled,
     rope=0.05, order=["Gender", "Education", "Age", "BDI",
                       "Gender_Education_Age_BDI", "TaCo"],
-    palette=sns.color_palette([green, blue, red]),
+    palette=sns.color_palette([blue, red]),
     show_legend=False
 
 )
 ax.set_xticklabels([i.get_text().replace("_", " ") for i in ax.get_xticklabels()],
                    rotation=15, ha="right")
 ax.set_ylim(0, 1.1)
+ax.set_xlabel("Confounds Used")
 
 fig.legend(handles=handles,
-           title="Shuffled Features:",
+           title="Shuffled Features",
            loc='upper center',
            bbox_to_anchor=(0.5, 1.05),
            ncol=3,)
