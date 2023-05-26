@@ -6,7 +6,7 @@ author: Sami Hamdan
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
 execute:
-  execute_notebooks: cache #force 
+  execute_notebooks: force 
   timeout: -1
 
 # Define the name of the latex output file for PDF builds
